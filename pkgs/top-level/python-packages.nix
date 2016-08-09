@@ -153,7 +153,21 @@ in modules // {
 
   breathe = callPackage ../development/python-modules/breathe { };
 
-  bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
+  bugseverywhere = callPackage ../applications/version-management/bugseverywhere { };
+
+  buildbot9Plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix { };
+
+  buildbot9 = callPackage ../development/tools/build-managers/buildbot { };
+
+  buildbot9-ui = callPackage ../development/tools/build-managers/buildbot {
+    plugins = with self.buildbot9Plugins; [ www ];
+  };
+
+  buildbot9-full = callPackage ../development/tools/build-managers/buildbot {
+    plugins = with self.buildbot9Plugins; [ www console-view waterfall-view ];
+  };
+
+  buildbot9-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix { };
 
   dbf = buildPythonPackage rec {
     name = "dbf-0.94.003";
