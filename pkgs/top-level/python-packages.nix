@@ -140,7 +140,21 @@ in modules // {
 
   breathe = callPackage ../development/python-modules/breathe { };
 
-  bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
+  bugseverywhere = callPackage ../applications/version-management/bugseverywhere { };
+
+  buildbot9Plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix { };
+
+  buildbot9 = callPackage ../development/tools/build-managers/buildbot { };
+
+  buildbot9-ui = callPackage ../development/tools/build-managers/buildbot {
+    plugins = with self.buildbot9Plugins; [ www ];
+  };
+
+  buildbot9-full = callPackage ../development/tools/build-managers/buildbot {
+    plugins = with self.buildbot9Plugins; [ www console-view waterfall-view ];
+  };
+
+  buildbot9-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix { };
 
   dbf = buildPythonPackage rec {
     name = "dbf-0.94.003";
@@ -10705,7 +10719,9 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; optionals isPy26 [ importlib argparse ];
+
     doCheck = false;
+    # URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:590)>
 
     meta = {
       description = "Clean single-source support for Python 3 and 2";
@@ -10723,8 +10739,8 @@ in modules // {
       homepage = https://python-future.org;
       downloadPage = https://github.com/PythonCharmers/python-future/releases;
       license = licenses.mit;
-      maintainers = with maintainers; [ prikhi ];
-      platforms = platforms.linux;
+      maintainers = with maintainers; [ prikhi nand0p ];
+      platforms = platforms.all;
     };
   };
 
@@ -29344,6 +29360,107 @@ in modules // {
     src = pkgs.fetchurl {
       url = "mirror://pypi/y/yapf/${name}.tar.gz";
       sha256 = "14kb9gxw39zhvrijhp066b4bm6bgv35iw56c394y4dyczpha0dij";
+    };
+  };
+
+  txaio = buildPythonPackage rec {
+    name = "txaio-${version}";
+    version = "2.5.1";
+
+    meta = {
+      description = "Utilities to support code that runs unmodified on Twisted and asyncio.";
+      homepage    = "https://github.com/crossbario/txaio";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+    };
+
+    propagatedBuildInputs = with self; [ six twisted ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/txaio/${name}.tar.gz";
+      sha256 = "1pni1m66mlmbybmaf3py4h7cpkmkssqb5l3rigkxvql2f53pcl32";
+    };
+  };
+
+  autobahn = buildPythonPackage rec {
+    name = "autobahn-${version}";
+    version = "0.15.0";
+
+    meta = {
+      description = "WebSocket and WAMP in Python for Twisted and asyncio.";
+      homepage    = "http://crossbar.io/autobahn";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+    };
+
+    propagatedBuildInputs = with self; [ six twisted txaio unittest2 trollius mock pytest ];
+
+    doCheck = false;
+    # ___ ERROR collecting build/lib/autobahn/rawsocket/test/test_rawsocket_url.py
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/autobahn/${name}.tar.gz";
+      sha256 = "12mqjh16d04mb2vnkjj0130vkxi0nl4ccn8bw4g1f7rlhqdwb79v";
+    };
+  };
+
+  txrequests = buildPythonPackage rec {
+    name = "txrequests-${version}";
+    version = "0.9.2";
+
+    meta = {
+      description = "Asynchronous Python HTTP for Humans.";
+      homepage    = "https://github.com/tardyp/txrequests";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ nand0p ];
+    };
+
+    propagatedBuildInputs = with self; [ twisted requests cryptography ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/txrequests/${name}.tar.gz";
+      sha256 = "0kkxxd17ar5gyjkz9yrrdr15a64qw6ym60ndi0zbwx2s634yfafw";
+    };
+  };
+
+  ramlfications = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "ramlfications";
+    version = "0.1.9";
+
+    meta = {
+      description = "A Python RAML parser.";
+      homepage    = "https://ramlfications.readthedocs.org";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ nand0p ];
+    };
+
+    doCheck = false;
+    # [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed
+
+    propagatedBuildInputs = with self; [ termcolor click markdown2 six jsonref pyyaml xmltodict attrs ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/${pname}/${name}.tar.gz";
+      sha256 = "0xvnna7kaq4nm5nfnwcwbr5bcm2s532hgyp7kq4v9iivn48rrf3v";
+    };
+  };
+
+    jsonref = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "jsonref";
+    version = "0.1";
+
+    meta = {
+      description = "An implementation of JSON Reference for Python.";
+      homepage    = "http://github.com/gazpachoking/jsonref";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/${pname}/${name}.tar.gz";
+      sha256 = "1lqa8dy1sr1bxi00ri79lmbxvzxi84ki8p46zynyrgcqhwicxq2n";
     };
   };
 }
