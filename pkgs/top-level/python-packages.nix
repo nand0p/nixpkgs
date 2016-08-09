@@ -142,6 +142,20 @@ in modules // {
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
+  buildbot9Plugins = callPackage ../development/tools/build-managers/buildbot9/plugins.nix { };
+
+  buildbot9 = callPackage ../development/tools/build-managers/buildbot9 { };
+
+  buildbot9-ui = callPackage ../development/tools/build-managers/buildbot9 {
+    plugins = with self.buildbot9Plugins; [ www ];
+  };
+
+  buildbot9-full = callPackage ../development/tools/build-managers/buildbot9 {
+    plugins = with self.buildbot9Plugins; [ www console-view waterfall-view ];
+  };
+
+  buildbot9-worker = callPackage ../development/tools/build-managers/buildbot9/worker.nix { };
+
   dbf = buildPythonPackage rec {
     name = "dbf-0.94.003";
     disabled = isPy3k;
@@ -29043,6 +29057,34 @@ in modules // {
     src = pkgs.fetchurl {
       url = "mirror://pypi/y/yapf/${name}.tar.gz";
       sha256 = "14kb9gxw39zhvrijhp066b4bm6bgv35iw56c394y4dyczpha0dij";
+    };
+  };
+
+  txaio = buildPythonPackage rec {
+    name = pname + "-" + version;
+    pname = "txaio";
+    version = "2.5.1";
+
+    propagatedBuildInputs = with self; [ six ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/45/e1/f7d88767d65dbfc20d4b4aa0dad657dbbe8ca629ead2bef24da04630a12a/txaio-2.5.1.tar.gz";
+      sha256 = "1pni1m66mlmbybmaf3py4h7cpkmkssqb5l3rigkxvql2f53pcl32";
+    };
+  };
+
+  autobahn = buildPythonPackage rec {
+    name = pname + "-" + version;
+    pname = "autobahn";
+    version = "0.15.0";
+
+    propagatedBuildInputs = with self; [ six txaio unittest2 trollius ];
+
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/80/40/bab2da78a1805a5039ad9fad2aec6bce8bdaf36e25bd32cd8a547a28c178/autobahn-0.15.0.tar.gz";
+      sha256 = "12mqjh16d04mb2vnkjj0130vkxi0nl4ccn8bw4g1f7rlhqdwb79v";
     };
   };
 }

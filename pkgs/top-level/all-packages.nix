@@ -6185,6 +6185,11 @@ in
     inherit (pythonPackages) twisted;
   };
 
+  buildbot9 = pythonPackages.buildbot9;
+  buildbot9-worker = pythonPackages.buildbot9-worker;
+  buildbot9-ui = pythonPackages.buildbot9-ui;
+  buildbot9-full = pythonPackages.buildbot9-full;
+
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
 
   byacc = callPackage ../development/tools/parsing/byacc { };
