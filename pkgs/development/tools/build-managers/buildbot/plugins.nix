@@ -6,6 +6,7 @@
 let
   buildbot-pkg = pythonPackages.buildPythonPackage rec {
     name = "buildbot-pkg-0.9.0rc1";
+    version = "0.9.0rc1";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/8f/37/6de8734299b94c6d853d2380f0a2cdadf00d24bbac6b8947ea2d3848d15d/buildbot-pkg-0.9.0rc1.tar.gz";
@@ -31,25 +32,15 @@ in {
 
   www = pythonPackages.buildPythonPackage rec {
     name = "buildbot-www-0.9.0rc1";
+    version = "0.9.0rc1";
+    format = "wheel";
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/b8/d5/71676944f0d7d054c5f97d2fe2c96715b7809c94c2a4e9b1b7282d84f84b/buildbot-www-0.9.0rc1.tar.gz";
-      sha256 = "1bd29a1587bb836faf725f03ce31ff990a03ddf20d4024887016d17cc8e4e38c";
+      url = "https://pypi.python.org/packages/f4/3c/8bf1add762739d1a15d63c91140d7fdc32d872860229ffdb10e735fdaa7a/buildbot_www-0.9.0rc1-py2-none-any.whl";
+      sha256 = "21c3b55be0c1622757a04e6573e8503f2222ba80f01af3770eb04d71e3c5a8fb";
     };
 
-    # fails to copy static/fonts by declaring package_data
-    # but seems to work using MANIFEST.in
-    patchPhase = ''
-      sed -i.bak -e "36,43d" setup.py
-      cat <<EOT >> MANIFEST.in
-        VERSION
-        static/*
-        static/img/*
-        static/fonts/*
-      EOT
-    '';
-
-    propagatedBuildInputs = with pythonPackages; [ mock buildbot-pkg buildbot9 ];
+    propagatedBuildInputs = [ pythonPackages.python ];
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
@@ -61,6 +52,7 @@ in {
 
   console-view = pythonPackages.buildPythonPackage rec {
     name = "buildbot-console-view-0.9.0rc1";
+    version = "0.9.0rc1";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/ac/d4/33b0465d9e1c2d2d098bbf2b44067e7cb626fab89fe1af732143e4a2359f/buildbot-console-view-0.9.0rc1.tar.gz";
@@ -79,6 +71,7 @@ in {
 
   waterfall-view = pythonPackages.buildPythonPackage rec {
     name = "buildbot-waterfall-view-0.9.0rc1";
+    version = "0.9.0rc1";
 
     src = fetchurl {
       url = "https://pypi.python.org/packages/34/0b/267f65cf865f25b3616e3231111028181c6cc0c74d983ff17b98721a9992/buildbot-waterfall-view-0.9.0rc1.tar.gz";
