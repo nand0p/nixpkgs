@@ -29088,4 +29088,17 @@ in modules // {
       sha256 = "12mqjh16d04mb2vnkjj0130vkxi0nl4ccn8bw4g1f7rlhqdwb79v";
     };
   };
+
+  txrequests = buildPythonPackage rec {
+    name = pname + "-" + version;
+    pname = "txrequests";
+    version = "0.9.2";
+
+    propagatedBuildInputs = with self; [ twisted requests cryptography ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/a3/8a/a765c9e4b20cb6eb4c85e80536cc939cc2cde4f89a69ff971922ab1c7351/txrequests-0.9.2.tar.gz";
+      sha256 = "dc29e7c9305a74be3e88cd0253bde1981855426e39fbf4a7f4af647542eb7d4e";
+    };
+  };
 }
