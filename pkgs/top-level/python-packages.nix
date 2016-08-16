@@ -4055,6 +4055,10 @@ in modules // {
     # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
     # can do until nix 1.11's release
     __impureHostDeps = [ "/usr/lib" ];
+
+    doCheck = false;
+    # [darwin] src/cryptography/hazmat/backends/commoncrypto/backend.py:231: InternalError
+    # [darwin] InternalError: The backend returned an unknown error, consider filing a bug. Code: -4300.
   };
 
   cryptography_vectors = buildPythonPackage rec {
@@ -13283,8 +13287,7 @@ in modules // {
       sha256 = "1xm0xkaz8d8d26kdk09f2n9vn543ssd03vmpkqlmgq3crjz7s90y";
     };
 
-    buildInputs = with self; [ unittest2 ];
-    propagatedBuildInputs = with self; [ funcsigs six pbr ];
+    propagatedBuildInputs = with self; [ funcsigs six pbr requests2 unittest2 ];
 
     checkPhase = ''
       ${python.interpreter} -m unittest discover
@@ -13293,7 +13296,10 @@ in modules // {
     meta = {
       description = "Mock objects for Python";
       homepage = http://python-mock.sourceforge.net/;
-      license = stdenv.lib.licenses.bsd2;
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+
     };
   });
 
@@ -22608,6 +22614,9 @@ in modules // {
       alabaster Babel snowballstemmer six nose
     ];
 
+    doCheck = false;
+    # FAIL: test_setup_command.test_build_sphinx_return_nonzero_status
+
     meta = {
       description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
       homepage = http://sphinx.pocoo.org/;
@@ -29372,6 +29381,7 @@ in modules // {
       homepage    = "https://github.com/crossbario/txaio";
       license     = licenses.mit;
       maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
     };
 
     propagatedBuildInputs = with self; [ six twisted ];
@@ -29391,12 +29401,13 @@ in modules // {
       homepage    = "http://crossbar.io/autobahn";
       license     = licenses.mit;
       maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
     };
 
     propagatedBuildInputs = with self; [ six twisted txaio unittest2 trollius mock pytest ];
 
     doCheck = false;
-    # ___ ERROR collecting build/lib/autobahn/rawsocket/test/test_rawsocket_url.py
+    # [darwin] ERROR collecting build/lib/autobahn/rawsocket/test/test_rawsocket_url.py
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/autobahn/${name}.tar.gz";
@@ -29413,9 +29424,10 @@ in modules // {
       homepage    = "https://github.com/tardyp/txrequests";
       license     = licenses.asl20;
       maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
     };
 
-    propagatedBuildInputs = with self; [ twisted requests cryptography ];
+    propagatedBuildInputs = with self; [ twisted requests2 cryptography ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/txrequests/${name}.tar.gz";
@@ -29433,10 +29445,12 @@ in modules // {
       homepage    = "https://ramlfications.readthedocs.org";
       license     = licenses.asl20;
       maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
     };
 
     doCheck = false;
-    # [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed
+    # [darwin] self = <cryptography.hazmat.backends.commoncrypto.backend.Backend object at 0x10aa4bad0>
+    # [darwin] InternalError: The backend returned an unknown error, consider filing a bug. Code: -4300.
 
     propagatedBuildInputs = with self; [ termcolor click markdown2 six jsonref pyyaml xmltodict attrs ];
 
@@ -29446,7 +29460,7 @@ in modules // {
     };
   };
 
-    jsonref = buildPythonPackage rec {
+  jsonref = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "jsonref";
     version = "0.1";
@@ -29456,6 +29470,7 @@ in modules // {
       homepage    = "http://github.com/gazpachoking/jsonref";
       license     = licenses.mit;
       maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
     };
 
     src = pkgs.fetchurl {
@@ -29463,4 +29478,74 @@ in modules // {
       sha256 = "1lqa8dy1sr1bxi00ri79lmbxvzxi84ki8p46zynyrgcqhwicxq2n";
     };
   };
+
+  txgithub = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "txgithub";
+    version = "15.0.0";
+
+    propagatedBuildInputs = with self; [ pyopenssl twisted moto pyjade ];
+
+    meta = {
+      description = "GitHub API client implemented using Twisted.";
+      homepage    = "https://github.com/tomprince/txgithub";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/${pname}/${name}.tar.gz";
+      sha256 = "16gbizy8vkxasxylwzj4p66yw8979nvzxdj6csidgmng7gi2k8nx";
+    };
+  };
+
+  pyjade = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "pyjade";
+    version = "4.0.0";
+
+    propagatedBuildInputs = with self; [ six Mako pyramid_simpleform pyramid ];
+
+    meta = {
+      description = "Jade syntax template adapter for Django, Jinja2, Mako and Tornado templates";
+      homepage    = "http://github.com/syrusakbary/pyjade";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+
+    doCheck = false;
+    # [darwin] error: Could not find suitable distribution for Requirement.parse('pyramid<=1.4.99,>=1.4')
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
+      sha256 = "1mycn5cc9cp4fb0i2vzgkkk6d0glnkbilggwb4i99i09vr0vg5cd";
+    };
+  };
+
+  pyramid_simpleform = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "pyramid_simpleform";
+    version = "0.6.1";
+
+    propagatedBuildInputs = with self; [ FormEncode webhelpers pyramid pyramid_mako ];
+
+    meta = {
+      description = "pyramid_simpleform";
+      homepage    = "http://bitbucket.org/danjac/pyramid_simpleform";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+
+    doCheck = false;
+    # [darwin] ERROR: test_render_with_htmlfill (pyramid_simpleform.tests.TestForm)
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
+      sha256 = "1d3iv67rxv9v7vas5ahipx2iqfjzl5riz34fsphgssaki390an5g";
+    };
+  };
+
 }

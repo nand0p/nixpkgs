@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication (rec {
   };
 
   doCheck = false;
-  # [darwin] Download error on https://pypi.python.org/simple/txgithub/: [SSL: CERTIFICATE_VERIFY_FAILED]
+  # [darwin] TypeError: can only concatenate list (not "str") to list
 
   propagatedBuildInputs = with pythonPackages; [
     twisted
@@ -31,6 +31,7 @@ pythonPackages.buildPythonApplication (rec {
     plugins
     setuptoolsTrial
     ramlfications
+    txgithub
   ];
 
   preInstall = ''
