@@ -4814,6 +4814,65 @@ in modules // {
     };
   };
 
+  pytest-virtualenv = buildPythonPackage rec {
+    name = "pytest-virtualenv-${version}";
+    version = "1.1.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest-virtualenv/${name}.tar.gz";
+      sha256 = "093f5fa479ee6201e48db367c307531dc8b800609b0c3ddca9c01e0fd466a669";
+    };
+
+    propagatedBuildInputs = with self; [ pytest pytest-shutil pytest-fixture-config setuptools-git ];
+
+    meta = {
+      description = "Create a Python virtual environment in your test that cleans up on teardown. The fixture has utility methods to install packages and list what’s installed.";
+      homepage = https://github.com/manahl/pytest-plugins;
+      license = licenses.mit;
+    };
+  };
+
+  pytest-shutil = buildPythonPackage rec {
+    name = "pytest-shutil-${version}";
+    version = "1.1.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest-shutil/${name}.tar.gz";
+      sha256 = "bb3c4fc2dddaf70b38bd9bb7a710d07728fa14f88fbc89c2a07979b383ade5d4";
+    };
+
+    # only one test in this file that tries to cd into /bin
+    preInstall = ''
+      rm tests/integration/test_cmdline_integration.py
+    '';
+
+    propagatedBuildInputs = with self; [ pytest pytestcov coverage setuptools-git mock pathpy execnet contextlib2 ];
+
+    meta = {
+      description = "A goodie-bag of unix shell and environment tools for py.test";
+      homepage = https://github.com/manahl/pytest-plugins;
+      license = licenses.mit;
+    };
+  };
+
+  pytest-fixture-config = buildPythonPackage rec {
+    name = "pytest-fixture-config-${version}";
+    version = "1.0.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest-fixture-config/${name}.tar.gz";
+      sha256 = "7d7cc1cb25f88a707f083b1dc2e3c2fdfc6f37709567a2587dd0cd0bcd70edb6";
+    };
+
+    propagatedBuildInputs = with self; [ pytest coverage virtualenv pytestcov six ];
+
+    meta = {
+      description = "Simple configuration objects for Py.test fixtures. Allows you to skip tests when their required config variables aren’t set.";
+      homepage = https://github.com/manahl/pytest-plugins;
+      license = licenses.mit;
+    };
+  };
+
   tinycss = buildPythonPackage rec {
     name = "tinycss-${version}";
     version = "0.3";
@@ -21575,14 +21634,14 @@ in modules // {
 
 
   setuptoolsTrial = buildPythonPackage {
-    name = "setuptools-trial-0.5.12";
+    name = "setuptools_trial-0.6.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/s/setuptools_trial/setuptools_trial-0.5.12.tar.gz";
-      sha256 = "9cc4ca5fd432944eb95e193f28b5a602e8b07201fea4d7077c0976a40f073432";
+      url = "mirror://pypi/s/setuptools_trial/setuptools_trial-0.6.0.tar.gz";
+      sha256 = "14220f8f761c48ba1e2526f087195077cf54fad7098b382ce220422f0ff59b12";
     };
 
-    propagatedBuildInputs = with self; [ twisted ];
+    propagatedBuildInputs = with self; [ twisted pathlib2 pytest virtualenv pytestrunner pytest-virtualenv ];
 
     meta = {
       description = "Setuptools plug-in that helps run unit tests built with the \"Trial\" framework (from Twisted)";
