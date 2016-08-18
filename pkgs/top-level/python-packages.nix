@@ -4618,6 +4618,26 @@ in modules // {
     };
   };
 
+  pytest-fixture-config = buildPythonPackage rec {
+    name = "pytest-fixture-config-${version}";
+    version = "1.0.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest-fixture-config/${name}.tar.gz";
+      sha256 = "7d7cc1cb25f88a707f083b1dc2e3c2fdfc6f37709567a2587dd0cd0bcd70edb6";
+    };
+
+    propagatedBuildInputs = with self; [ pytest coverage virtualenv pytestcov six ];
+
+    meta = {
+      description = "Simple configuration objects for Py.test fixtures. Allows you to skip tests when their required config variables aren’t set.";
+      homepage = https://github.com/manahl/pytest-plugins;
+      license = licenses.mit;
+      maintainers = with maintainers; [ ryansydnor ];
+      platforms   = platforms.all;
+    };
+  };
+
   pytestflakes = buildPythonPackage rec {
     name = "pytest-flakes-${version}";
     version = "1.0.0";
