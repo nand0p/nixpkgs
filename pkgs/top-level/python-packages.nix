@@ -13420,15 +13420,16 @@ in modules // {
   };
 
   mock = buildPythonPackage (rec {
-    name = "mock-1.3.0";
+    name = "${pname}-${version}";
+    pname = "mock";
+    version = "2.0.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mock/${name}.tar.gz";
+      url = "mirror://pypi/m/${pname}/${name}.tar.gz";
       sha256 = "1xm0xkaz8d8d26kdk09f2n9vn543ssd03vmpkqlmgq3crjz7s90y";
     };
 
-    buildInputs = with self; [ unittest2 ];
-    propagatedBuildInputs = with self; [ funcsigs six pbr ];
+    propagatedBuildInputs = with self; [ funcsigs six pbr unittest2 ];
 
     checkPhase = ''
       ${python.interpreter} -m unittest discover
@@ -13437,7 +13438,9 @@ in modules // {
     meta = {
       description = "Mock objects for Python";
       homepage = http://python-mock.sourceforge.net/;
-      license = stdenv.lib.licenses.bsd2;
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
     };
   });
 
