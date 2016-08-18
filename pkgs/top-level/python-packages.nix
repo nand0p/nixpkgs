@@ -4862,6 +4862,26 @@ in modules // {
     };
   });
 
+  pytest-virtualenv = buildPythonPackage rec {
+    name = "pytest-virtualenv-${version}";
+    version = "1.1.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest-virtualenv/${name}.tar.gz";
+      sha256 = "093f5fa479ee6201e48db367c307531dc8b800609b0c3ddca9c01e0fd466a669";
+    };
+
+    propagatedBuildInputs = with self; [ pytest pytest-shutil pytest-fixture-config setuptools-git ];
+
+    meta = {
+      description = "Create a Python virtual environment in your test that cleans up on teardown. The fixture has utility methods to install packages and list what’s installed.";
+      homepage = https://github.com/manahl/pytest-plugins;
+      license = licenses.mit;
+      maintainers = with maintainers; [ ryansydnor ];
+      platforms   = platforms.all;
+    };
+  };
+
   pytest_xdist = buildPythonPackage rec {
     name = "pytest-xdist-1.8";
 
