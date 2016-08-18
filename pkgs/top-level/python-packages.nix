@@ -8158,15 +8158,24 @@ in modules // {
 
 
   pyramid_mako = buildPythonPackage rec {
-    name = "pyramid_mako-0.3.1";
+    name = "${pname}-${version}";
+    pname = "pyramid_mako";
+    version = "1.0.2";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyramid_mako/${name}.tar.gz";
-      sha256 = "00811djmsc4rz20kpy2paam05fbx6dmrv2i5jf90f6xp6zw4isy6";
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
+      sha256 = "18gk2vliq8z4acblsl6yzgbvnr9rlxjlcqir47km7kvlk1xri83d";
     };
 
-    buildInputs = with self; [ webtest ];
-    propagatedBuildInputs = with self; [ pyramid Mako ];
+    propagatedBuildInputs = with self; [ pyramid Mako webtest ];
+
+    meta = {
+      description = "Mako template bindings for the Pyramid web framework";
+      homepage    = "https://github.com/Pylons/pyramid_mako";
+      license     = licenses.bsd2;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
   };
 
 
