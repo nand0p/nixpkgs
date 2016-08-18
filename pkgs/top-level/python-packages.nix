@@ -8116,13 +8116,17 @@ in modules // {
 
     propagatedBuildInputs = with self; [
       chameleon
-      pyramid
+      pyramid_1_4_9
       zope_interface
       setuptools
     ];
 
     meta = {
-      maintainers = with maintainers; [ domenkozar ];
+      homepage = "https://github.com/Pylons/pyramid_chameleon";
+      description = "bindings for the Chameleon templating system for the Pyramid web framework";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ domenkozar nand0p ];
+      platforms = platforms.all;
     };
   };
 
