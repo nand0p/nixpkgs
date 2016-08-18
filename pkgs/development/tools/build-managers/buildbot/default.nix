@@ -30,6 +30,7 @@ pythonPackages.buildPythonApplication (rec {
     setuptoolsTrial
     ramlfications
     txgithub
+    service-identity
   ];
 
   preInstall = ''

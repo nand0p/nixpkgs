@@ -29635,7 +29635,9 @@ in modules // {
     pname = "pyjade";
     version = "4.0.0";
 
-    propagatedBuildInputs = with self; [ six Mako pyramid_1_4_9 chameleon pyramid_chameleon ];
+    propagatedBuildInputs = with self; [ six Mako pyramid chameleon pyramid_chameleon tornado ];
+
+    patchPhase = '' sed -i 's/1.4.99/1.7/' setup.py '';
 
     meta = {
       description = "Jade syntax template adapter for Django, Jinja2, Mako and Tornado templates";
