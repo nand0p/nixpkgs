@@ -1067,6 +1067,29 @@ in modules // {
 
   });
 
+  autobahn = buildPythonPackage rec {
+    name = "autobahn-${version}";
+    version = "0.15.0";
+
+    meta = {
+      description = "WebSocket and WAMP in Python for Twisted and asyncio.";
+      homepage    = "http://crossbar.io/autobahn";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+
+    propagatedBuildInputs = with self; [ six twisted txaio unittest2 trollius mock pytest ];
+
+    doCheck = false;
+    # [darwin] ERROR collecting build/lib/autobahn/rawsocket/test/test_rawsocket_url.py
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/autobahn/${name}.tar.gz";
+      sha256 = "12mqjh16d04mb2vnkjj0130vkxi0nl4ccn8bw4g1f7rlhqdwb79v";
+    };
+  };
+
   chai = buildPythonPackage rec {
     name = "chai-${version}";
     version = "1.1.1";
