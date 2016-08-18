@@ -26387,6 +26387,27 @@ in modules // {
     };
   };
 
+  txgithub = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "txgithub";
+    version = "15.0.0";
+
+    propagatedBuildInputs = with self; [ pyopenssl twisted moto pyjade ];
+
+    meta = {
+      description = "GitHub API client implemented using Twisted.";
+      homepage    = "https://github.com/tomprince/txgithub";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/${pname}/${name}.tar.gz";
+      sha256 = "16gbizy8vkxasxylwzj4p66yw8979nvzxdj6csidgmng7gi2k8nx";
+    };
+  };
+
   txamqp = buildPythonPackage rec {
     name = "txamqp-${version}";
     version = "0.3";
