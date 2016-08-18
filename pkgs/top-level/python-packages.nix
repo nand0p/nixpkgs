@@ -4642,18 +4642,19 @@ in modules // {
   };
 
   pytest-fixture-config = buildPythonPackage rec {
-    name = "pytest-fixture-config-${version}";
+    name = "${pname}-${version}";
+    pname = "pytest-fixture-config";
     version = "1.0.1";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-fixture-config/${name}.tar.gz";
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
       sha256 = "7d7cc1cb25f88a707f083b1dc2e3c2fdfc6f37709567a2587dd0cd0bcd70edb6";
     };
 
     propagatedBuildInputs = with self; [ pytest coverage virtualenv pytestcov six ];
 
     meta = {
-      description = "Simple configuration objects for Py.test fixtures. Allows you to skip tests when their required config variables aren’t set.";
+      description = "Simple configuration objects for Py.test fixtures. Allows you to skip tests when their required config variables are not set.";
       homepage = https://github.com/manahl/pytest-plugins;
       license = licenses.mit;
       maintainers = with maintainers; [ ryansydnor ];
@@ -4838,7 +4839,7 @@ in modules // {
 
     meta = {
       description = "A goodie-bag of unix shell and environment tools for py.test";
-      homepage = https://github.com/manahl/pytest-plugins;
+      homepage = "https://github.com/manahl/pytest-plugins";
       maintainers = with maintainers; [ ryansydnor ];
       platforms   = platforms.all;
       license = licenses.mit;
@@ -10893,7 +10894,7 @@ in modules // {
     name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
-      url = ""mirror://pypi/f/${pname}/${name}.tar.gz";
+      url = "mirror://pypi/f/${pname}/${name}.tar.gz";
       sha256 = "0vm61j5br6jiry6pgcxnwvxhki8ksnirp7k9mcbmxmgib3r60xd3";
     };
 
@@ -13460,7 +13461,7 @@ in modules // {
 
     meta = {
       description = "Mock objects for Python";
-      homepage = http://python-mock.sourceforge.net/;
+      homepage = "http://python-mock.sourceforge.net";
       license = licenses.bsd2;
       maintainers = with maintainers; [ nand0p ];
       platforms   = platforms.all;
