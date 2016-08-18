@@ -8054,6 +8054,39 @@ in modules // {
 
   };
 
+  pyramid_1_4_9 = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "pyramid";
+    version = "1.4.9";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
+      sha256 = "110iyh499ra2aq3b91m547bxvmbmdf5580l4bzdp684p5g2lkagg";
+    };
+
+    propagatedBuildInputs = with self; [
+      chameleon
+      Mako
+      repoze_lru
+      PasteDeploy
+      zope_interface
+      webob
+      venusian
+      translationstring
+      zope_deprecation
+      zope_component
+      webtest
+      tornado
+    ];
+
+    meta = {
+      description = "The Pyramid Web Framework, a Pylons project";
+      homepage    = "https://trypyramid.com";
+      license     = licenses.bsd2;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
 
   pyramid_beaker = buildPythonPackage rec {
     name = "pyramid_beaker-0.8";
