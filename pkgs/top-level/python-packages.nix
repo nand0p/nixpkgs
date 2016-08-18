@@ -985,21 +985,21 @@ in modules // {
   } else null;
 
   funcsigs = buildPythonPackage rec {
-    name = "funcsigs-0.4";
+    name = "${pname}-${version}";
+    pname = "funcsigs";
+    version = "1.0.2";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/f/funcsigs/${name}.tar.gz";
-      sha256 = "d83ce6df0b0ea6618700fe1db353526391a8a3ada1b7aba52fed7a61da772033";
+      url = "mirror://pypi/f/${pname}/${name}.tar.gz";
+      sha256 = "0l4g5818ffyfmfs1a924811azhjj8ax9xd1cffr1mzd3ycn0zfx7";
     };
 
-    buildInputs = with self; [
-      unittest2
-    ];
+    propagatedBuildInputs = with self; [ unittest2 ];
 
     meta = with pkgs.stdenv.lib; {
       description = "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+";
       homepage = "https://github.com/aliles/funcsigs";
-      maintainers = with maintainers; [ garbas ];
+      maintainers = with maintainers; [ garbas nand0p ];
       license = licenses.asl20;
     };
   };
