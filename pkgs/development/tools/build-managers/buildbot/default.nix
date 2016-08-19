@@ -26,12 +26,11 @@ pythonPackages.buildPythonApplication (rec {
     future
     dateutil
     autobahn
-    plugins
     setuptoolsTrial
     ramlfications
     txgithub
     service-identity
-  ];
+  ] ++ plugins;
 
   preInstall = ''
     # buildbot tries to import 'buildslaves' but does not

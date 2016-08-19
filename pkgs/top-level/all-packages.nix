@@ -6194,10 +6194,14 @@ in
     inherit (pythonPackages) twisted;
   };
 
-  buildbot = pythonPackages.buildbot9;
-  buildbot-worker = pythonPackages.buildbot9-worker;
-  buildbot-ui = pythonPackages.buildbot9-ui;
-  buildbot-full = pythonPackages.buildbot9-full;
+  buildbot = callPackage ../development/tools/build-managers/buildbot { };
+  buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix { };
+  buildbot-ui = self.buildbot.override {
+    plugins = with pythonPackages.buildbot-plugins; [ www ];
+  };
+  buildbot-full = self.buildbot.override {
+    plugins = with pythonPackages.buildbot-plugins; [ www console-view waterfall-view ];
+  };
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
 
