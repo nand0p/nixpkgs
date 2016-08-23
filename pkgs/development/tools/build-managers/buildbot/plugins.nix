@@ -1,10 +1,11 @@
 { stdenv,
   fetchurl,
-  pythonPackages
+  pythonPackages,
+  pkgs
 }:
 
 let
-  buildbot-pkg = pythonPackages.buildPythonPackage rec {
+  buildbot_pkg = pythonPackages.buildPythonPackage rec {
     name = "buildbot-pkg-0.9.0rc1";
     version = "0.9.0rc1";
 
@@ -33,14 +34,23 @@ in {
   www = pythonPackages.buildPythonPackage rec {
     name = "buildbot-www-0.9.0rc1";
     version = "0.9.0rc1";
-    format = "wheel";
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/f4/3c/8bf1add762739d1a15d63c91140d7fdc32d872860229ffdb10e735fdaa7a/buildbot_www-0.9.0rc1-py2-none-any.whl";
-      sha256 = "21c3b55be0c1622757a04e6573e8503f2222ba80f01af3770eb04d71e3c5a8fb";
+      url = "https://pypi.python.org/packages/b8/d5/71676944f0d7d054c5f97d2fe2c96715b7809c94c2a4e9b1b7282d84f84b/buildbot-www-0.9.0rc1.tar.gz";
+      sha256 = "1bd29a1587bb836faf725f03ce31ff990a03ddf20d4024887016d17cc8e4e38c";
     };
 
-    propagatedBuildInputs = [ pythonPackages.python ];
+    buildInputs = with pythonPackages; [ mock ];
+    propagatedBuildInputs = [ buildbot_pkg pkgs.buildbot ];
+
+    # http://bugs.python.org/issue19286
+    patchPhase = ''
+       sed -i '37d' setup.py
+       sed -i '37 a \ \ \ \ \ \ \ \ \ \ \ \ \x27static/*.css,\x27' setup.py
+       sed -i '37 a \ \ \ \ \ \ \ \ \ \ \ \ \x27static/*.html,\x27' setup.py
+       sed -i '37 a \ \ \ \ \ \ \ \ \ \ \ \ \x27static/*.js,\x27' setup.py
+       sed -i '36 a \ \ \ \ \ \ \ \ \x27\x27: \[' setup.py
+    '';
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
@@ -59,7 +69,7 @@ in {
       sha256 = "4cd6c276082a65d2a7d6c9f8fbc14c9f7a57f80ca6ffa09b111976e026ab9d3c";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
+    propagatedBuildInputs = [ buildbot_pkg ];
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
@@ -78,7 +88,7 @@ in {
       sha256 = "8822f75ceac242d00dc10cdc381864e460b936532a1618bf47ce9b353a63814a";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
+    propagatedBuildInputs = [ buildbot_pkg ];
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
