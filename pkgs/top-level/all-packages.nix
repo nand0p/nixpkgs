@@ -6192,11 +6192,11 @@ in
 
   buildbot = callPackage ../development/tools/build-managers/buildbot { };
   buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix { };
-  buildbot-ui = self.buildbot.override {
-    plugins = with pythonPackages.buildbot-plugins; [ www ];
+  buildbot-ui = callPackage ../development/tools/build-managers/buildbot {
+    inherit (pythonPackages) buildbot-www;
   };
   buildbot-full = self.buildbot.override {
-    plugins = with pythonPackages.buildbot-plugins; [ www console-view waterfall-view ];
+    inherit (pythonPackages) buildbot-www buildbot-console-view buildbot-waterfall-view;
   };
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };

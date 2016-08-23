@@ -1,7 +1,6 @@
 { stdenv,
   pythonPackages,
-  fetchurl,
-  plugins ? []
+  fetchurl
 }:
 
 pythonPackages.buildPythonApplication (rec {
@@ -30,7 +29,7 @@ pythonPackages.buildPythonApplication (rec {
     ramlfications
     txgithub
     service-identity
-  ] ++ plugins;
+  ];
 
   preInstall = ''
     # buildbot tries to import 'buildslaves' but does not
