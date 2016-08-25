@@ -41,6 +41,8 @@ in {
       sha256 = "21c3b55be0c1622757a04e6573e8503f2222ba80f01af3770eb04d71e3c5a8fb";
     };
 
+    propagatedBuildInputs = [ buildbot-pkg ];
+
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
       description = "Buildbot UI";

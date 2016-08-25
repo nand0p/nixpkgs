@@ -18,6 +18,7 @@ pythonPackages.buildPythonApplication (rec {
     lz4
     txrequests
     txgithub
+    txaio
     setuptoolsTrial
     ramlfications
     service-identity
