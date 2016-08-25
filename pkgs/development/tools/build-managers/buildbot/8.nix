@@ -13,15 +13,17 @@ pythonPackages.buildPythonApplication (rec {
     sha256 = "0r79fs305qdr2rjfg3kpip4350ypx00qh9gvm0ic48kmpl3zs7ik";
   };
 
+  buildInputs = with pythonPackages; [ setuptoolsTrial ];
+
   propagatedBuildInputs = with pythonPackages;
     [ twisted
       dateutil
       jinja2
       sqlalchemy_migrate
       pysqlite
-      setuptoolsTrial
       txrequests
       txgithub
+      service-identity
     ];
 
   patchPhase = ''

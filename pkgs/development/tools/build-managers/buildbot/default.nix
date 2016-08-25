@@ -16,12 +16,8 @@ pythonPackages.buildPythonApplication (rec {
 
   buildInputs = with pythonPackages; [
     lz4
-    txrequests
-    txgithub
-    txaio
     setuptoolsTrial
     ramlfications
-    service-identity
   ];
 
   propagatedBuildInputs = with pythonPackages; [
@@ -33,6 +29,10 @@ pythonPackages.buildPythonApplication (rec {
     dateutil
     future
     autobahn
+    txaio
+    txrequests
+    txgithub
+    service-identity
   ] ++ plugins;
 
   preInstall = ''
