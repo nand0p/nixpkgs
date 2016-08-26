@@ -1066,7 +1066,7 @@ in modules // {
   autobahn = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "autobahn";
-    version = "0.15.0";
+    version = "0.16.0";
 
     meta = {
       description = "WebSocket and WAMP in Python for Twisted and asyncio.";
@@ -1081,11 +1081,11 @@ in modules // {
     propagatedBuildInputs = with self; [ six twisted ];
 
     doCheck = false;
-    # [darwin] ERROR collecting build/lib/autobahn/rawsocket/test/test_rawsocket_url.py
+    # ERROR collecting build/lib/autobahn/rawsocket/test/test_rawsocket_url.py
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/${pname}/${name}.tar.gz";
-      sha256 = "12mqjh16d04mb2vnkjj0130vkxi0nl4ccn8bw4g1f7rlhqdwb79v";
+      sha256 = "1158ml8h3g0vlsgw2jmy579glbg7dn0mjij8xibdl509b8qv9p51";
     };
   };
 
@@ -24185,10 +24185,10 @@ in modules // {
     disabled = isPy3k;
 
     name = "Twisted-${version}";
-    version = "16.2.0";
+    version = "16.3.2";
     src = pkgs.fetchurl {
       url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-      sha256 = "0ydxrp9myw1mvsz3qfzx5579y5llmqa82pxvqchgp5syczffi450";
+      sha256 = "0rsrcjbrbl97542rvdgim69mcszhhj8zij6bifk7xgmnzrl2xhr2";
     };
 
     propagatedBuildInputs = with self; [ zope_interface ];

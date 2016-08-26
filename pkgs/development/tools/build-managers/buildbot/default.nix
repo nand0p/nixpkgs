@@ -7,31 +7,28 @@
 pythonPackages.buildPythonApplication (rec {
   name = "${pname}-${version}";
   pname = "buildbot";
-  version = "0.9.0rc1";
+  version = "0.9.0rc2";
 
   src = fetchurl {
     url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-    sha256 = "09xsagnfxb8p4a5rqjl69l2q09gnxrba705z8a6sv0jc973c92gh";
+    sha256 = "06xzbjzji3by4hldwr850fc989ymsfl2s8nil21klv2g00dgmcmk";
   };
 
   buildInputs = with pythonPackages; [
     lz4
-    txrequests
-    txgithub
-    txaio
     setuptoolsTrial
-    ramlfications
-    service-identity
+    txrequests
   ];
 
   propagatedBuildInputs = with pythonPackages; [
+    service-identity
     twisted
     jinja2
     sqlalchemy
     sqlalchemy_migrate
-    zope_interface
-    dateutil
     future
+    dateutil
+    txaio
     autobahn
   ] ++ plugins;
 
