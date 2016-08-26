@@ -56,8 +56,8 @@ in {
     version = "0.9.0rc2";
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/ac/d4/33b0465d9e1c2d2d098bbf2b44067e7cb626fab89fe1af732143e4a2359f/${name}.tar.gz";
-      sha256 = "41d6c276082a65d2a7d6c9f8fbc14c9f7a57f80ca6ffa09b111976e026ab9d3c";
+      url = "https://pypi.python.org/packages/f4/51/e24cc1b596e5b262a272cba3687476a13ec7d9ea24bf1f4fd0cd72902bb6/${name}.tar.gz";
+      sha256 = "0970gq1sxnfd0nlrnd3mj25i3cginlw2pj5ffqsd57n5hlqg48ib";
     };
 
     propagatedBuildInputs = [ buildbot-pkg ];
@@ -75,8 +75,8 @@ in {
     version = "0.9.0rc2";
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/34/0b/267f65cf865f25b3616e3231111028181c6cc0c74d983ff17b98721a9992/${name}.tar.gz";
-      sha256 = "1122f75ceac242d00dc10cdc381864e460b936532a1618bf47ce9b353a63814a";
+      url = "https://pypi.python.org/packages/c2/21/3895355b05f91977a8b8e5435f85354e927c2ef547a25432a6bacf792a67/${name}.tar.gz";
+      sha256 = "1zybrbbsyplv93zkin8cb3z1bqqr6px4p203ldcpn7lds5s9vk00";
     };
 
     propagatedBuildInputs = [ buildbot-pkg ];
