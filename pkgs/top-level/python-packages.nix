@@ -12154,12 +12154,14 @@ in modules // {
   };
 
   isort = buildPythonPackage rec {
-    name = "isort-4.2.2";
+    name = "isort-4.2.5";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/isort/${name}.tar.gz";
-      sha256 = "0xqxnkli3j69mj1m0i1r9n68bfkdxfcgxi602lqgy491m21q1rpj";
+      sha256 = "0p7a6xaq7zxxq5vr5gizshnsbk2afm70apg97xwfdxiwyi201cjn";
     };
+
+    doCheck = false;
 
     buildInputs = with self; [ mock pytest ];
 
@@ -22849,6 +22851,26 @@ in modules // {
     doCheck = false;
   };
 
+  sphinx-jinja = buildPythonPackage (rec {
+    name = "${pname}-${version}";
+    pname = "sphinx-jinja";
+    version = "0.2.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
+      sha256 = "1zsnhc573rvaww9qqyzs4f5h4hhvxklvppv14450vi5dk8rij81z";
+    };
+
+    propagatedBuildInputs = with self; [ sphinx blockdiag ];
+
+    meta = {
+      description = "includes jinja templates in a documentation";
+      maintainers = [ nand0p ];
+      license = "mit";
+    };
+  });
+
+
   sphinx_rtd_theme = buildPythonPackage (rec {
     name = "sphinx_rtd_theme-0.1.9";
 
@@ -22870,6 +22892,45 @@ in modules // {
     };
   });
 
+  sphinxcontrib-blockdiag = buildPythonPackage (rec {
+    name = "${pname}-${version}";
+    pname = "sphinxcontrib-blockdiag";
+    version = "1.5.5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
+      sha256 = "1w7q2hhpzk159wd35hlbwkh80hnglqa475blcd9vjwpkv1kgkpvw";
+    };
+
+    propagatedBuildInputs = with self; [ sphinx blockdiag ];
+
+    meta = {
+      description = "Sphinx blockdiag extension";
+      homepage = "https://github.com/blockdiag/sphinxcontrib-blockdiag";
+      maintainers = [ nand0p ];
+      license = "BSD";
+    };
+  });
+
+  sphinxcontrib-spelling = buildPythonPackage (rec {
+    name = "${pname}-${version}";
+    pname = "sphinxcontrib-spelling";
+    version = "2.2.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
+      sha256 = "1f0fymrk4kvhqs0vj9gay4lhacxkfrlrpj4gvg0p4wjdczplxd3z";
+    };
+
+    propagatedBuildInputs = with self; [ sphinx pyenchant];
+
+    meta = {
+      description = "Sphinx spelling extension";
+      homepage = "http://bitbucket.org/dhellmann/sphinxcontrib-spelling";
+      maintainers = [ nand0p ];
+      license = "BSD";
+    };
+  });
 
   sphinxcontrib_httpdomain = buildPythonPackage (rec {
     name = "sphinxcontrib-httpdomain-1.3.0";

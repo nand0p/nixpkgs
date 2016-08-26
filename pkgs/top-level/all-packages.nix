@@ -6204,6 +6204,7 @@ in
     plugins = with pythonPackages.buildbot-plugins; [ www ];
   };
   buildbot-full = self.buildbot.override {
+    worker = self.buildbot-worker;
     plugins = with pythonPackages.buildbot-plugins; [ www console-view waterfall-view ];
   };
 

@@ -1,7 +1,8 @@
 { stdenv,
   pythonPackages,
   fetchurl,
-  plugins ? []
+  plugins ? [],
+  worker ? [],
 }:
 
 pythonPackages.buildPythonApplication (rec {
@@ -14,23 +15,51 @@ pythonPackages.buildPythonApplication (rec {
     sha256 = "06xzbjzji3by4hldwr850fc989ymsfl2s8nil21klv2g00dgmcmk";
   };
 
+  doCheck = false;
+
   buildInputs = with pythonPackages; [
     lz4
-    setuptoolsTrial
     txrequests
+    pyjade
+    boto3
+    moto
+    txgithub
+    mock
+    setuptoolsTrial
+    isort
+    pylint
+    astroid
+    pyflakes
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    service-identity
+
+    # core
     twisted
     jinja2
+    zope_interface
+    future
     sqlalchemy
     sqlalchemy_migrate
-    future
     dateutil
     txaio
     autobahn
-  ] ++ plugins;
+    
+    # tls
+    pyopenssl
+    service-identity
+    idna
+
+    # docs
+    sphinx
+    sphinxcontrib-blockdiag
+    sphinxcontrib-spelling
+    pyenchant
+    docutils
+    ramlfications
+    sphinx-jinja
+
+  ] ++ [ plugins worker ];
 
   preInstall = ''
     # buildbot tries to import 'buildslaves' but does not
