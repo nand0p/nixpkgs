@@ -8,8 +8,8 @@ pythonPackages.buildPythonApplication (rec {
   version = "0.9.0rc2";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/98/9e/5ad4f156e719865fd31f880a18c44aa11bae5bfbbdc0fae4eb5694a6e9f5/${name}.tar.gz";
-    sha256 = "4fc9bc888aee3af5e144c51a6c11d8f5afe57e459644749c66b495e82fba7e7e";
+    url = "https://pypi.python.org/packages/6a/be/ae80e5e87bc92ac813cd944c08d3b6168090145fc168e7a553e88c07067a/${name}.tar.gz";
+    sha256 = "19l28s2fyzln6nv2ypbdg11xiz7lrjy0n64fzhngfalv61x2bp8j";
   };
 
   buildInputs = with pythonPackages; [ setuptoolsTrial mock ];
