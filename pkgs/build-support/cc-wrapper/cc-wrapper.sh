@@ -47,10 +47,13 @@ while [ $n -lt ${#params[*]} ]; do
         isCpp=1
     elif [ "$p" = -nostdlib ]; then
         isCpp=-1
-    elif [ "$p" = -nostdinc ]; then
-        cppInclude=0
-    elif [ "$p" = -nostdinc++ ]; then
-        cppInclude=0
+
+    # NOTE: this breaks buildbot8/9
+    #elif [ "$p" = -nostdinc ]; then
+    #    cppInclude=0
+    #elif [ "$p" = -nostdinc++ ]; then
+    #    cppInclude=0
+
     elif [ "${p:0:1}" != - ]; then
         nonFlagArgs=1
     elif [ "$p" = -m32 ]; then
