@@ -22749,34 +22749,33 @@ in modules // {
     };
   };
 
-
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.3.6";
-
-    # 1.4 is broken
-    # https://github.com/sphinx-doc/sphinx/issues/2394
-
+    name = "${pname}-${version}";
+    pname = "Sphinx";
+    version = "1.4.6";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/S/Sphinx/${name}.tar.gz";
-      sha256 = "12pzlfkjjlwgvsj56k0y809jpx5mgcs9548k1l4kdbr028ifjfqb";
+      url = "mirror://pypi/S/${pname}/${name}.tar.gz";
+      sha256 = "1lvr39ab5sjp894jshk39xidlxw9vc735882cgcfr4dlm4546hwy";
     };
-
-    LC_ALL = "en_US.UTF-8";
-    checkPhase = ''
-      PYTHON=${python.executable} make test
-    '';
-
     buildInputs = with self; [ mock pkgs.glibcLocales ];
     propagatedBuildInputs = with self; [
-      docutils jinja2 pygments sphinx_rtd_theme
-      alabaster Babel snowballstemmer six nose
+      docutils
+      jinja2
+      pygments
+      sphinx_rtd_theme
+      alabaster
+      Babel
+      snowballstemmer
+      six
+      nose
+      imagesize
     ];
-
     meta = {
       description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
       homepage = http://sphinx.pocoo.org/;
       license = licenses.bsd3;
       platforms = platforms.unix;
+      maintainers = with maintainers; [ nand0p ];
     };
   });
 
