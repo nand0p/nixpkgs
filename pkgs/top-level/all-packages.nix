@@ -6200,11 +6200,12 @@ in
 
   buildbot = callPackage ../development/tools/build-managers/buildbot { };
   buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix { };
+  buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix { };
   buildbot-ui = self.buildbot.override {
-    plugins = with pythonPackages.buildbot-plugins; [ www ];
+    plugins = with self.buildbot-plugins; [ www ];
   };
   buildbot-full = self.buildbot.override {
-    plugins = with pythonPackages.buildbot-plugins; [ www console-view waterfall-view ];
+    plugins = with self.buildbot-plugins; [ www console-view waterfall-view ];
   };
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };

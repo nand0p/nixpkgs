@@ -155,8 +155,6 @@ in modules // {
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
-  buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix { };
-
   dbf = buildPythonPackage rec {
     name = "dbf-0.94.003";
     disabled = isPy3k;
