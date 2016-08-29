@@ -6228,18 +6228,22 @@ in modules // {
 
 
   execnet = buildPythonPackage rec {
-    name = "execnet-1.1";
+    name = "${pname}-${version}";
+    pname = "execnet";
+    version = "1.4.1";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/e/execnet/${name}.zip";
-      sha256 = "fa1d8bd6b6d2282ff4df474b8ac687e1775bff4fc6462b219a5f89d5e9e6908c";
+      url = "mirror://pypi/e/${pname}/${name}.tar.gz";
+      sha256 = "1rpk1vyclhg911p3hql0m0nrpq7q7mysxnaaw6vs29cpa6kx8vgn";
     };
 
-    doCheck = false; #!isPy3k;  # failures..
+    propagatedBuildInputs = with self; [ apipkg ];
 
     meta = {
       description = "Rapid multi-Python deployment";
       license = licenses.gpl2;
+      homepage = "http://codespeak.net/execnet";
+      maintainers = with maintainers; [ nand0p ];
     };
   };
 
