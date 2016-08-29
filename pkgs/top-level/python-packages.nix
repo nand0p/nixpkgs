@@ -22774,6 +22774,22 @@ in modules // {
   });
 
 
+  sphinx-jinja = buildPythonPackage (rec {
+    name = "${pname}-${version}";
+    pname = "sphinx-jinja";
+    version = "0.2.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
+      sha256 = "1zsnhc573rvaww9qqyzs4f5h4hhvxklvppv14450vi5dk8rij81z";
+    };
+    propagatedBuildInputs = with self; [ sphinx blockdiag ];
+    meta = {
+      description = "includes jinja templates in a documentation";
+      maintainers = [ nand0p ];
+      license = "mit";
+    };
+  });
+
   sphinx_pypi_upload = buildPythonPackage (rec {
     name = "Sphinx-PyPI-upload-0.2.1";
 
