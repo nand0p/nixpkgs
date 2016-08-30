@@ -979,21 +979,18 @@ in modules // {
   } else null;
 
   funcsigs = buildPythonPackage rec {
-    name = "funcsigs-0.4";
-
+    name = "${pname}-${version}";
+    pname = "funcsigs";
+    version = "1.0.2";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/f/funcsigs/${name}.tar.gz";
-      sha256 = "d83ce6df0b0ea6618700fe1db353526391a8a3ada1b7aba52fed7a61da772033";
+      url = "mirror://pypi/f/${pname}/${name}.tar.gz";
+      sha256 = "0l4g5818ffyfmfs1a924811azhjj8ax9xd1cffr1mzd3ycn0zfx7";
     };
-
-    buildInputs = with self; [
-      unittest2
-    ];
-
+    buildInputs = with self; [ unittest2 ];
     meta = with pkgs.stdenv.lib; {
       description = "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+";
       homepage = "https://github.com/aliles/funcsigs";
-      maintainers = with maintainers; [ garbas ];
+      maintainers = with maintainers; [ garbas nand0p ];
       license = licenses.asl20;
     };
   };
@@ -4556,8 +4553,11 @@ in modules // {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
       sha256 = "1mycn5cc9cp4fb0i2vzgkkk6d0glnkbilggwb4i99i09vr0vg5cd";
     };
-    propagatedBuildInputs = with self; [ six Mako pyramid chameleon pyramid_chameleon tornado ];
+    buildInputs = with self; [ pyramid_mako nose django jinja2 tornado pyramid Mako ];
+    propagatedBuildInputs = with self; [ six ];
     patchPhase = '' sed -i 's/1.4.99/1.99/' setup.py '';
+    doCheck = !isPy3k;
+    # ImportError: cannot import name 'BaseLoader'
     meta = {
       description = "Jade syntax template adapter for Django, Jinja2, Mako and Tornado templates";
       homepage    = "http://github.com/syrusakbary/pyjade";
@@ -4889,7 +4889,9 @@ in modules // {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
       sha256 = "093f5fa479ee6201e48db367c307531dc8b800609b0c3ddca9c01e0fd466a669";
     };
-    propagatedBuildInputs = with self; [ pytest pytest-shutil pytest-fixture-config setuptools-git ];
+    buildInputs = with self; [ pytestcov mock cmdline ];
+    propagatedBuildInputs = with self; [ pytest-fixture-config pytest-shutil pytest ];
+    checkPhase = '' py.test tests/unit '';
     meta = {
       description = "Create a Python virtual environment in your test that cleans up on teardown. The fixture has utility methods to install packages and list what’s installed.";
       homepage = https://github.com/manahl/pytest-plugins;
@@ -6251,8 +6253,16 @@ in modules // {
       url = "mirror://pypi/e/${pname}/${name}.tar.gz";
       sha256 = "1rpk1vyclhg911p3hql0m0nrpq7q7mysxnaaw6vs29cpa6kx8vgn";
     };
-    doCheck = !isPy3k;  # failures..
+    buildInputs = with self; [ pytest setuptools_scm ];
     propagatedBuildInputs = with self; [ apipkg ];
+    # remove vbox tests
+    patchPhase = ''
+      rm -v testing/test_termination.py
+      rm -v testing/test_channel.py
+      rm -v testing/test_xspec.py
+      rm -v testing/test_gateway.py
+    '';
+    checkPhase = '' py.test testing '';
     meta = {
       description = "Rapid multi-Python deployment";
       license = licenses.gpl2;
@@ -8879,20 +8889,20 @@ in modules // {
     };
   };
 
-
-
   repoze_sphinx_autointerface = buildPythonPackage rec {
-    name = "repoze.sphinx.autointerface-0.7.1";
-
+    name = "${pname}-${version}";
+    version = "0.8";
+    pname = "repoze.sphinx.autointerface";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/r/repoze.sphinx.autointerface/${name}.tar.gz";
-      sha256 = "97ef5fac0ab0a96f1578017f04aea448651fa9f063fc43393a8253bff8d8d504";
+      url = "mirror://pypi/r/${pname}/${name}.tar.gz";
+      sha256 = "08ycivzf7bh4a1zcyp31hbyqs1b2c9r26raa3vxjwwmbfqr3iw4f";
     };
-
-    propagatedBuildInputs = with self; [ zope_interface sphinx ];
-
+    propagatedBuildInputs = with self; [ zope_interface sphinx translationstring urllib3 ];
     meta = {
-      maintainers = with maintainers; [ domenkozar ];
+      description = "Sphinx extension: auto-generates API docs from Zope interfaces";
+      homepage = "http://www.repoze.org";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ domenkozar nand0p ];
       platforms = platforms.all;
     };
   };
@@ -12183,8 +12193,8 @@ in modules // {
       sha256 = "0p7a6xaq7zxxq5vr5gizshnsbk2afm70apg97xwfdxiwyi201cjn";
     };
     buildInputs = with self; [ mock pytest ];
-    # ERROR:  no tests ran failed with exit code 5
     doCheck = false;
+    # ERROR:  no tests ran failed with exit code 5
     meta = {
       description = "A Python utility / library to sort Python imports";
       homepage = https://github.com/timothycrosley/isort;
@@ -13487,20 +13497,14 @@ in modules // {
   };
 
   mock = buildPythonPackage (rec {
-    name = "mock-1.3.0";
-
+    name = "mock-2.0.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mock/${name}.tar.gz";
-      sha256 = "1xm0xkaz8d8d26kdk09f2n9vn543ssd03vmpkqlmgq3crjz7s90y";
+      sha256 = "1flbpksir5sqrvq2z0dp8sl4bzbadg21sj4d42w3klpdfvgvcn5i";
     };
-
-    buildInputs = with self; [ unittest2 ];
-    propagatedBuildInputs = with self; [ funcsigs six pbr ];
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover
-    '';
-
+    buildInputs = with self; [ setuptools unittest2 ];
+    propagatedBuildInputs = with self; [ pbr six funcsigs ];
+    checkPhase = '' ${python.interpreter} -m unittest discover '';
     meta = {
       description = "Mock objects for Python";
       homepage = http://python-mock.sourceforge.net/;
@@ -21837,6 +21841,8 @@ in modules // {
     };
     buildInputs = with self; [ pytest virtualenv pytestrunner pytest-virtualenv ];
     propagatedBuildInputs = with self; [ twisted pathlib2 ];
+    doCheck = !isPy3k;
+    # fixture 'virtualenv' not found
     meta = {
       description = "Setuptools plugin that makes unit tests execute with trial instead of pyunit.";
       homepage = "https://github.com/rutsky/setuptools-trial";
@@ -22844,32 +22850,34 @@ in modules // {
     };
   };
 
-
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.3.6";
-
-    # 1.4 is broken
-    # https://github.com/sphinx-doc/sphinx/issues/2394
-
+    name = "${pname}-${version}";
+    pname = "Sphinx";
+    version = "1.3.6";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/S/Sphinx/${name}.tar.gz";
+      url = "mirror://pypi/S/${pname}/${name}.tar.gz";
       sha256 = "12pzlfkjjlwgvsj56k0y809jpx5mgcs9548k1l4kdbr028ifjfqb";
     };
-
-    LC_ALL = "en_US.UTF-8";
-    checkPhase = ''
-      PYTHON=${python.executable} make test
-    '';
-
-    buildInputs = with self; [ mock pkgs.glibcLocales ];
+    buildInputs = with self; [ nose simplejson mock ];
+    patchPhase = '' sed -i '$ d' tests/test_setup_command.py '';
+    checkPhase = '' PYTHON=${python.executable} make test '';
     propagatedBuildInputs = with self; [
-      docutils jinja2 pygments sphinx_rtd_theme
-      alabaster Babel snowballstemmer six nose
+      docutils
+      jinja2
+      pygments
+      sphinx_rtd_theme
+      alabaster
+      Babel
+      snowballstemmer
+      six
+      sqlalchemy
+      whoosh
+      imagesize
     ];
-
     meta = {
       description = "A tool that makes it easy to create intelligent and beautiful documentation for Python projects";
       homepage = http://sphinx.pocoo.org/;
+      maintainers = with maintainers; [ nand0p ];
       license = licenses.bsd3;
       platforms = platforms.unix;
     };
@@ -26559,7 +26567,9 @@ in modules // {
       url = "mirror://pypi/t/${pname}/${name}.tar.gz";
       sha256 = "16gbizy8vkxasxylwzj4p66yw8979nvzxdj6csidgmng7gi2k8nx";
     };
-    propagatedBuildInputs = with self; [ pyopenssl twisted moto pyjade ];
+    propagatedBuildInputs = with self; [ pyopenssl twisted ];
+    doCheck = !isPy3k;
+    # ERROR: except usage.UsageError, errortext: SyntaxError: invalid syntax
     meta = {
       description = "GitHub API client implemented using Twisted.";
       homepage    = "https://github.com/tomprince/txgithub";
@@ -29857,4 +29867,22 @@ in modules // {
       sha256 = "1lqa8dy1sr1bxi00ri79lmbxvzxi84ki8p46zynyrgcqhwicxq2n";
     };
   };
+
+  whoosh = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "Whoosh";
+    version = "2.7.4";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/25/2b/6beed2107b148edc1321da0d489afc4617b9ed317ef7b72d4993cad9b684/${name}.tar.gz";
+      sha256 = "10qsqdjpbc85fykc1vgcs8xwbgn4l2l52c8d83xf1q59pwyn79bw";
+    };
+    meta = {
+      description = "Fast, pure-Python full text indexing, search, and spell checking library.";
+      homepage    = "http://bitbucket.org/mchaput/whoosh";
+      license     = licenses.bsd2;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
+
 }
