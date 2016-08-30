@@ -4548,6 +4548,25 @@ in modules // {
     };
   };
 
+  pyjade = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "pyjade";
+    version = "4.0.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
+      sha256 = "1mycn5cc9cp4fb0i2vzgkkk6d0glnkbilggwb4i99i09vr0vg5cd";
+    };
+    propagatedBuildInputs = with self; [ six Mako pyramid chameleon pyramid_chameleon tornado ];
+    patchPhase = '' sed -i 's/1.4.99/1.99/' setup.py '';
+    meta = {
+      description = "Jade syntax template adapter for Django, Jinja2, Mako and Tornado templates";
+      homepage    = "http://github.com/syrusakbary/pyjade";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
+
   pytest = self.pytest_29;
 
   pytest_27 = buildPythonPackage rec {
