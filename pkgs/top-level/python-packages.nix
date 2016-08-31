@@ -4552,8 +4552,11 @@ in modules // {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
       sha256 = "1mycn5cc9cp4fb0i2vzgkkk6d0glnkbilggwb4i99i09vr0vg5cd";
     };
-    propagatedBuildInputs = with self; [ six Mako pyramid chameleon pyramid_chameleon tornado ];
+    buildInputs = with self; [ pyramid_mako nose django jinja2 tornado pyramid Mako pytestdjango ];
+    propagatedBuildInputs = with self; [ six ];
     patchPhase = '' sed -i 's/1.4.99/1.99/' setup.py '';
+    # ImportError: cannot import name 'BaseLoader'
+    doCheck = !isPy3k;
     meta = {
       description = "Jade syntax template adapter for Django, Jinja2, Mako and Tornado templates";
       homepage    = "http://github.com/syrusakbary/pyjade";
@@ -4636,8 +4639,10 @@ in modules // {
     # doing this to allow depending packages to find
     # pytest's binaries
     pytest = self.pytest;
+    doCheck = !isPy3k;
+    #AttributeError: module 'pytest' has no attribute 'config
 
-    propagatedBuildInputs = with self; [ django pytest setuptools_scm_18 ];
+    propagatedBuildInputs = with self; [ django pytest setuptools_scm ];
 
     meta = {
       description = "py.test plugin for testing of Django applications";
