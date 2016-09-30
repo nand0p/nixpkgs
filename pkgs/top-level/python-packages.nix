@@ -1027,17 +1027,14 @@ in modules // {
   } else null;
 
   funcsigs = buildPythonPackage rec {
-    name = "funcsigs-0.4";
-
+    name = "${pname}-${version}";
+    pname = "funcsigs";
+    version = "1.0.2";
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/funcsigs/${name}.tar.gz";
-      sha256 = "d83ce6df0b0ea6618700fe1db353526391a8a3ada1b7aba52fed7a61da772033";
+      sha256 = "0l4g5818ffyfmfs1a924811azhjj8ax9xd1cffr1mzd3ycn0zfx7";
     };
-
-    buildInputs = with self; [
-      unittest2
-    ];
-
+    buildInputs = with self; [ unittest2 ];
     meta = with pkgs.stdenv.lib; {
       description = "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+";
       homepage = "https://github.com/aliles/funcsigs";
@@ -10508,6 +10505,24 @@ in modules // {
 
   pep8 = self.pycodestyle;
 
+  pydocstyle = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "pydocstyle";
+    version = "1.1.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.zip";
+      sha256 = "00dd18mrr1wxgyb48visyp2n1h8s4csj0ikk7mfhhgisc984jswm";
+    };
+    meta = {
+      description = "Python docstring style checker (formerly pep257)";
+      homepage = https://github.com/PyCQA/pydocstyle;
+      license = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
+    };
+  };
+
+  pep257 = self.pydocstyle;
+
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
     version = "3.0.4";
@@ -10534,6 +10549,23 @@ in modules // {
       homepage = http://pypi.python.org/pypi/flake8;
       license = licenses.mit;
       maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  flake8-docstrings = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "flake8-docstrings";
+    version = "1.0.2";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/${pname}/${name}.tar.gz";
+      sha256 = "15j5lmiy4f48sxcginbvdkv79c4lyyjdd1g9x8wv6adyrjkhp1k5";
+    };
+    propagatedBuildInputs = with self; [ flake8 pydocstyle ];
+    meta = {
+      description = "Extension for flake8 which uses pydocstyle to check docstrings.";
+      homepage = https://gitlab.com/pycqa/flake8-docstrings;
+      license = licenses.mit;
+      maintainers = with maintainers; [ nand0p ];
     };
   };
 
@@ -13773,20 +13805,18 @@ in modules // {
   };
 
   mock = buildPythonPackage (rec {
-    name = "mock-1.3.0";
-
+    name = "${pname}-${version}";
+    pname = "mock";
+    version = "2.0.0";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mock/${name}.tar.gz";
-      sha256 = "1xm0xkaz8d8d26kdk09f2n9vn543ssd03vmpkqlmgq3crjz7s90y";
+      url = "mirror://pypi/m/${pname}/${name}.tar.gz";
+      sha256 = "1flbpksir5sqrvq2z0dp8sl4bzbadg21sj4d42w3klpdfvgvcn5i";
     };
-
     buildInputs = with self; [ unittest2 ];
     propagatedBuildInputs = with self; [ funcsigs six pbr ];
-
     checkPhase = ''
       ${python.interpreter} -m unittest discover
     '';
-
     meta = {
       description = "Mock objects for Python";
       homepage = http://python-mock.sourceforge.net/;
@@ -15791,7 +15821,7 @@ in modules // {
     doCheck = false;
 
     propagatedBuildInputs = with self; [
-      pbr requests2 sphinx_1_2
+      pbr requests2 sphinx
     ];
   };
 
@@ -15922,14 +15952,13 @@ in modules // {
 
 
   oslo-utils = buildPythonPackage rec {
-    name = "oslo.utils-${version}";
-    version = "2.6.0";
-
+    name = "${pname}-${version}";
+    pname = "oslo.utils";
+    version = "3.16.0";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.utils/${name}.tar.gz";
-      sha256 = "1prgi03nxkcykyja821qkycsqlnpyzw17mpvj8qf3pjmgb9gv1fy";
+      url = "mirror://pypi/o/${pname}/${name}.tar.gz";
+      sha256 = "1w9hcrs6wxdrihhzzfsywrvmlpiks9bm54wlkjksnp6rm66h37hh";
     };
-
     propagatedBuildInputs = with self; [ pbr Babel six iso8601 pytz netaddr netifaces
                                          monotonic oslo-i18n wrapt debtcollector ];
     buildInputs = with self; [ oslotest mock coverage oslosphinx ];
@@ -16924,76 +16953,163 @@ in modules // {
   };
 
   oslo-config = buildPythonPackage rec {
-    name = "oslo.config-${version}";
-    version = "2.5.0";
-
+    name = "${pname}-${version}";
+    pname = "oslo.config";
+    version = "3.17.0";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.config/${name}.tar.gz";
-      sha256 = "043mavrzj7vjn7kh1dddci4sf67qwqnnn6cm0k1d19alks9hismz";
+      url = "mirror://pypi/o/${pname}/${name}.tar.gz";
+      sha256 = "0ypg3ymcawrfk2xaz7sg8wl24pb4siwfblykgl7nylwrz46bjp54";
     };
-
-    propagatedBuildInputs = with self; [ argparse pbr six netaddr stevedore ];
-    buildInputs = [ self.mock ];
-
-    # TODO: circular import on oslo-i18n
+    buildInputs = with self; [
+      hacking
+      fixtures
+      subunit
+      testrepository
+      testscenarios
+      testtools
+      #oslotest
+      coverage
+      sphinx
+      oslosphinx
+      reno
+      mock
+      #bandit
+    ];
+    propagatedBuildInputs = with self; [
+      #debtcollector
+      netaddr
+      six
+      #stevedore
+      #oslo.i18n
+      rfc3986
+    ];
     doCheck = false;
   };
 
   oslotest = buildPythonPackage rec {
-    name = "oslotest-${version}";
-    version = "1.12.0";
-
+    name = "${pname}-${version}";
+    pname = "oslotest";
+    version = "2.10.0";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslotest/${name}.tar.gz";
-      sha256 = "17i92hymw1dwmmb5yv90m2gam2x21mc960q1pr7bly93x49h8666";
+      url = "mirror://pypi/o/${pname}/${name}.tar.gz";
+      sha256 = "0asxq2xbmk11pwhmwlhqyl3nqzrf3s1v2rx1ic9xgil9b8p7n1js";
     };
-
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
+      sed -i 's/!=1.19.0,!=1.19.1,!=1.20.0,//' requirements.txt
+      sed -i 's/os-client-config.*$/os-client-config/g' requirements.txt
+      cat requirements.txt
     '';
-
-    propagatedBuildInputs = with self; [ pbr fixtures subunit six testrepository
-      testscenarios testtools mock mox3 oslo-config os-client-config ];
+    buildInputs = with self; [
+      hacking
+      coverage
+      sphinx
+      oslosphinx
+      #oslo-config
+    ];
+    propagatedBuildInputs = with self; [
+      fixtures
+      subunit
+      six
+      testrepository
+      testscenarios
+      testtools
+      mock
+      mox3
+      os-client-config
+      #debtcollector
+    ];
+    doCheck = false; # circular dependencies
   };
 
   os-client-config = buildPythonPackage rec {
-    name = "os-client-config-${version}";
-    version = "1.8.1";
-
+    name = "${pname}-${version}";
+    pname = "os-client-config";
+    version = "1.21.1";
+    format = "wheel";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/o/os-client-config/${name}.tar.gz";
-      sha256 = "10hz4yp594mi1p7v1pvgsmx5w2rnb9y8d0jvb2lfv03ljnwzv8jz";
+      url = "https://pypi.python.org/packages/01/12/dc30699510ac33d6d33a9578d509085c21a241043d93a777d02001066d56/os_client_config-1.21.1-py2.py3-none-any.whl";
+      sha256 = "1ay4gx4nyr3zk6ypk1ib8z1b5wrl8fv48d9g0yx14wjsxp4x701b";
+
+      #url = "mirror://pypi/o/${pname}/${name}.tar.gz";
+      #sha256 = "15igmgnpcircw3mgd6f5w01ykcxbfywr19kfj48qv326q03jsk5d";
     };
-
-    buildInputs = with self; [ pbr testtools testscenarios testrepository fixtures ];
-    propagatedBuildInputs = with self; [ appdirs pyyaml keystoneauth1 ];
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
+    #buildInputs = with self; [
+    #  hacking
+    #  coverage
+    #  extras
+    #  fixtures
+    #  jsonschema
+    #  mock
+    #  glanceclient
+    #  keystoneclient
+    #  subunit
+    #  sphinx
+    #  oslosphinx
+    #  # oslotest # circular dep
+    #  reno
+    #  testrepository
+    #  testscenarios
+    #  testtools
+    #];
+    #propagatedBuildInputs = with self; [
+    #  pyyaml
+    #  appdirs
+    #  keystoneauth1
+    #  requestsexceptions
+    #];
+    #patchPhase = ''
+    #  sed -i 's@python@${python.interpreter}@' .testr.conf";
+    #'';
     # TODO: circular import on oslotest
-    preCheck = ''
-      rm os_client_config/tests/{test_config,test_cloud_config,test_environ}.py
-    '';
+    #preCheck = ''
+    #  rm os_client_config/tests/{test_config,test_cloud_config,test_environ}.py
+    #'';
   };
 
   keystoneauth1 = buildPythonPackage rec {
     name = "keystoneauth1-${version}";
-    version = "1.1.0";
-    disabled = isPyPy; # a test fails
+    version = "2.12.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/k/keystoneauth1/${name}.tar.gz";
-      sha256 = "05fc6xsp5mal52ijvj84sf7mrw706ihadfdf5mnq9zxn7pfl4118";
+      sha256 = "1w5cp83jrazbv8indqy5mk76q65ni5s6nwxd787nfs43k798k7ck";
     };
 
-    buildInputs = with self; [ pbr testtools testresources testrepository mock
-                               pep8 fixtures mox3 requests-mock ];
-    propagatedBuildInputs = with self; [ argparse iso8601 requests2 six stevedore
-                                         webob oslo-config ];
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
+    buildInputs = with self; [
+      hacking
+      flake8-docstrings
+      bandit
+      coverage
+      discover
+      fixtures
+      mock
+      oslo-config
+      oslosphinx
+      oslo-utils
+      oslotest
+      os-testr
+      betamax
+      pycrypto
+      reno
+      requests-mock
+      sphinx
+      testrepository
+      testresources
+      testtools
+      pyyaml
+    ];
+    propagatedBuildInputs = with self; [
+      pbr
+      iso8601
+      positional
+      requests
+      six
+      stevedore
+    ];
+    #patchPhase = ''
+    #  sed -i 's@python@${python.interpreter}@' .testr.conf
+    #'';
   };
 
   requests-mock = buildPythonPackage rec {
@@ -17506,15 +17622,14 @@ in modules // {
   };
 
   fixtures = buildPythonPackage rec {
-    name = "fixtures-1.4.0";
-
+    name = "${pname}-${version}";
+    pname = "fixtures";
+    version = "3.0.0";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/f/fixtures/${name}.tar.gz";
-      sha256 = "0djxvdwm8s60dbfn7bhf40x6g818p3b3mlwijm1c3bqg7msn271y";
+      url = "mirror://pypi/f/${pname}/${name}.tar.gz";
+      sha256 = "1vxj29bzz3rd4pcy51d05wng9q9dh4jq6wx92yklsm7i6h1ddw7w";
     };
-
-    buildInputs = with self; [ pbr testtools mock ];
-
+    buildInputs = with self; [ pbr six testtools ];
     meta = {
       description = "Reusable state for writing clean tests and more";
       homepage = "https://pypi.python.org/pypi/fixtures";
@@ -17567,24 +17682,6 @@ in modules // {
       homepage = "http://getpelican.com/";
       license = licenses.agpl3;
       maintainers = with maintainers; [ offline prikhi garbas ];
-    };
-  };
-
-  pep257 = buildPythonPackage rec {
-    name = "pep257-${version}";
-    version = "0.3.2";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/GreenSteam/pep257/archive/${version}.tar.gz";
-      sha256 = "0v8aq0xzsa7clazszxl42904c3jpq69lg8a5hg754bqcqf72hfrn";
-    };
-    buildInputs = with self; [ pytest ];
-
-    meta = {
-      homepage = https://github.com/GreenSteam/pep257/;
-      description = "Python docstring style checker";
-      longDescription = "Static analysis tool for checking compliance with Python PEP 257.";
-      lecense = licenses.mit;
     };
   };
 
@@ -20834,7 +20931,7 @@ in modules // {
 
 
   pyyaml = buildPythonPackage (rec {
-    name = "PyYAML-3.12";
+    name = "PyYAML-3.12.0";
 
     src = pkgs.fetchurl {
       url = "http://pyyaml.org/download/pyyaml/${name}.zip";
@@ -22653,22 +22750,28 @@ in modules // {
   };
 
   stevedore = buildPythonPackage rec {
-    name = "stevedore-1.7.0";
-
+    name = "${pname}-${version}";
+    pname = "stevedore";
+    version = "1.17.1";
     src = pkgs.fetchurl {
-      url = "mirror://pypi/s/stevedore/${name}.tar.gz";
-      sha256 = "149pjc0c3z6khjisn4yil3f94qjnzwafz093wc8rrzbw828qdkv8";
+      url = "mirror://pypi/s/${pname}/${name}.tar.gz";
+      sha256 = "1qxqqkhqci3j520x4sszbmj1aavgaf8yrhb127lb55p9xhklwhbr";
     };
-
-    doCheck = false;
-
-    buildInputs = with self; [ oslosphinx ];
-    propagatedBuildInputs = with self; [ pbr six argparse ];
-
+    buildInputs = with self; [
+      pillow
+      mock
+      coverage
+      testrepository
+      oslosphinx
+      sphinx
+      oslotest
+    ];
+    propagatedBuildInputs = with self; [ pbr six ];
     meta = {
       description = "Manage dynamic plugins for Python applications";
       homepage = "https://pypi.python.org/pypi/stevedore";
       license = licenses.asl20;
+      maintainers = with maintainers; [ nand0p ];
     };
   };
 
@@ -30322,5 +30425,149 @@ in modules // {
       platforms   = platforms.all;
     };
   };
+
+  positional = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "positional";
+    version = "1.1.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
+      sha256 = "1c1lf2kgzrc1f6rh3ja4kkrslndhgpfhkahafmj1b8g5dsj5z17g";
+    };
+    buildInputs = with self; [
+      coverage
+      fixtures
+      sphinx
+      testrepository
+      testresources
+      testtools
+    ];
+    propagatedBuildInputs = with self; [ wrapt pbr ];
+    meta = {
+      description = "Library to enforce positional or key-word arguments";
+      homepage    = "https://github.com/morganfainberg/positional";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
+
+  discover = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "discover";
+    version = "0.4.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/${pname}/${name}.tar.gz";
+      sha256 = "0y8d0zwiqar51kxj8lzmkvwc3b8kazb04gk5zcb4nzg5k68zmhq5";
+    };
+    meta = {
+      description = "Test discovery for unittest.";
+      homepage    = "http://pypi.python.org/pypi/discover/";
+      license     = licenses.bsd2;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
+
+  reno = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "reno";
+    version = "1.8.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/${pname}/${name}.tar.gz";
+      sha256 = "1pqg0xzcilmyrrnpa87m11xwlvfc94a98s28z9cgddkhw27lg3ps";
+    };
+    buildInputs = with self; [
+      hacking
+      mock
+      coverage
+      discover
+      subunit
+      oslosphinx
+      oslotest
+      testrepository
+      testscenarios
+      testtools
+    ];
+    propagatedBuildInputs = with self; [
+      pbr
+      Babel
+      pyyaml
+    ];
+    meta = {
+      description = "RElease NOtes manager";
+      homepage    = "http://www.openstack.org/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
+
+  requestsexceptions = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "requestsexceptions";
+    version = "1.1.3";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/${pname}/${name}.tar.gz";
+      sha256 = "13qg0xzcilmyrrnpa87m11xwlvfc94a98s28z9cgddkhw27lg3ps";
+    };
+    buildInputs = with self; [ flake8 ];
+    propagatedBuildInputs = with self; [ pbr ];
+    meta = {
+      description = "Import exceptions from potentially bundled packages in requests.";
+      homepage    = "http://www.openstack.org/";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
+
+  hacking = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "hacking";
+    version = "0.11.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/h/${pname}/${name}.tar.gz";
+      sha256 = "0lmjql35l67p3q8hddnj9jdygglk1r606d875vrjbvwd7ldkw684";
+    };
+    buildInputs = with self; [
+      coverage
+      discover
+      fixtures
+      mock
+      subunit
+      sphinx
+      oslosphinx
+      testrepository
+      testscenarios
+      testtools
+      eventlet
+    ];
+    propagatedBuildInputs = with self; [
+      pbr
+      pep8
+      pyflakes
+      flake8
+      mccabe
+      six
+    ];
+    patchPhase = ''
+      sed -i 's/==/>=/' requirements.txt
+      sed -i 's/<2.6.0,//' requirements.txt
+      sed -i 's/pep8/pycodestyle/' requirements.txt
+      sed -i 's/pep8/pycodestyle/' hacking/core.py
+      rm -fv hacking/tests/test_doctest.py
+      rm -fv hacking/tests/test_local.py
+    '';
+
+    meta = {
+      description = "OpenStack Hacking Guideline Enforcement";
+      homepage    = "http://docs.openstack.org/developer/hacking/";
+      license     = licenses.free;
+      maintainers = with maintainers; [ nand0p ];
+      platforms   = platforms.all;
+    };
+  };
+
 
 }
