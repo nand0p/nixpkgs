@@ -30,7 +30,7 @@ build null {
       mkdir -p $TMPDIR/"${stdenv.cc.libc.out}/lib/locale"
 
       # Hack to allow building of the locales (needed since glibc-2.12)
-      sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef --prefix='$TMPDIR',' ../glibc-2*/localedata/Makefile
+      sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef --no-archive --prefix='$TMPDIR',' ../glibc-2*/localedata/Makefile
     ''
       + stdenv.lib.optionalString (!allLocales) ''
       # Check that all locales to be built are supported
@@ -56,13 +56,17 @@ build null {
 
   installPhase =
     ''
-      mkdir -p "$out/lib/locale"
-      cp -v "$TMPDIR/$NIX_STORE/"*"/lib/locale/locale-archive" "$out/lib/locale"
+      echo disabled
+
+      #mkdir -p "$out/lib/locale"
+      #cp -v "$TMPDIR/$NIX_STORE/"*"/lib/locale/locale-archive" "$out/lib/locale"
     '';
 
   setupHook = writeText "locales-setup-hook.sh"
     ''
-      export LOCALE_ARCHIVE=@out@/lib/locale/locale-archive
+      echo disabled
+
+      #export LOCALE_ARCHIVE=@out@/lib/locale/locale-archive
     '';
 
   meta.description = "Locale information for the GNU C Library";
