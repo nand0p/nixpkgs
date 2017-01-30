@@ -6,16 +6,15 @@
   openssh,
   buildbot-worker,
   plugins ? [],
-  enableLocalWorker ? false
 }:
 
 pythonPackages.buildPythonApplication (rec {
   name = "${pname}-${version}";
   pname = "buildbot";
-  version = "0.9.0.post1";
+  version = "0.9.3";
   src = fetchurl {
     url = "mirror://pypi/b/${pname}/${name}.tar.gz";
-    sha256 = "18rnsp691cnmbymlch6czx3mrcmifmf6dk97h9nslgfkkyf25n5g";
+    sha256 = "1yw7knk5dcvwms14vqwlp89flhjf8567l17s9cq7vydh760nmg62";
   };
 
   buildInputs = with pythonPackages; [
@@ -31,7 +30,9 @@ pythonPackages.buildPythonApplication (rec {
     pylint
     astroid
     pyflakes
-  ] ++ lib.optionals (enableLocalWorker) [openssh];
+    openssh
+    buildbot-worker
+  ];
 
   propagatedBuildInputs = with pythonPackages; [
 
@@ -61,13 +62,7 @@ pythonPackages.buildPythonApplication (rec {
     ramlfications
     sphinx-jinja
 
-  ] ++ plugins ++
-  lib.optionals (enableLocalWorker) [buildbot-worker];
-
-  preInstall = ''
-    # writes out a file that can't be read properly
-    sed -i.bak -e '69,84d' buildbot/test/unit/test_www_config.py
-  '';
+  ] ++ plugins;
 
   postPatch = ''
     # re-hardcode path to tail
