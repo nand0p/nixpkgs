@@ -6127,17 +6127,16 @@ with pkgs;
     pythonPackages = python2Packages;
   };
   buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix {
-    pythonPackages = python2Packages;
+    inherit (python2Packages) buildPythonApplication mock setuptoolsTrial twisted future;
   };
   buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix {
-    pythonPackages = python2Packages;
+    inherit (python2Packages) buildPythonPackage setuptools fetchPypi;
   };
   buildbot-ui = self.buildbot.override {
     plugins = with self.buildbot-plugins; [ www ];
   };
   buildbot-full = self.buildbot.override {
     plugins = with self.buildbot-plugins; [ www console-view waterfall-view ];
-    enableLocalWorker = true;
   };
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
