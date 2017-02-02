@@ -20515,11 +20515,12 @@ in {
   };
 
   pyinotify = buildPythonPackage rec {
-    name = "pyinotify-${version}";
+    name = "${pname}-${version}";
+    pname = "pyinotify";
     version = "0.9.6";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${name}/${name}.tar.gz";
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
       sha256 = "1x3i9wmzw33fpkis203alygfnrkcmq9w1aydcm887jh6frfqm6cw";
     };
 
@@ -20531,6 +20532,7 @@ in {
       description = "Monitor filesystems events on Linux platforms with inotify";
       license = licenses.mit;
       platforms = platforms.linux;
+      maintainers = with maintainers; [ nand0p ];
     };
   };
 
