@@ -1,8 +1,14 @@
-{ stdenv, lib, pythonPackages, fetchurl, coreutils, openssh,
-  buildbot-worker, makeWrapper, gnused, plugins ? [],
-}:
+{ stdenv, lib, fetchurl, coreutils, openssh, buildbot-worker, makeWrapper,
+  gnused, plugins ? [],
 
-pythonPackages.buildPythonApplication (rec {
+  lz4, txrequests, pyjade, boto3, moto, txgithub, mock, setuptoolsTrial,
+  isort, pylint, astroid, pyflakes, treq, twisted, jinja2, zope_interface,
+  future, sqlalchemy, sqlalchemy_migrate, dateutil, txaio, autobahn,
+  pyopenssl, service-identity, idna, sphinx, sphinxcontrib-blockdiag,
+  sphinxcontrib-spelling, pyenchant, docutils, ramlfications, sphinx-jinja,
+  buildPythonApplication }:
+
+buildPythonApplication (rec {
   name = "${pname}-${version}";
   pname = "buildbot";
   version = "0.9.3";
@@ -11,7 +17,7 @@ pythonPackages.buildPythonApplication (rec {
     sha256 = "1yw7knk5dcvwms14vqwlp89flhjf8567l17s9cq7vydh760nmg62";
   };
 
-  buildInputs = with pythonPackages; [
+  buildInputs = [
     lz4
     txrequests
     pyjade
@@ -30,13 +36,12 @@ pythonPackages.buildPythonApplication (rec {
     treq
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = [
 
     # core
     twisted
     jinja2
     zope_interface
-    future
     sqlalchemy
     sqlalchemy_migrate
     future

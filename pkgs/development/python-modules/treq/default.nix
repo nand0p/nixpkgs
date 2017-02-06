@@ -22,6 +22,6 @@ buildPythonPackage rec {
      homepage = http://github.com/twisted/treq;
      description = "A requests-like API built on top of twisted.web's Agent";
      license = licenses.mit;
-     maintainers = maintainers.nando0p;
+     maintainers = maintainers.nand0p;
    };
 }

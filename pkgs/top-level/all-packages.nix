@@ -6124,7 +6124,11 @@ with pkgs;
   };
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
-    pythonPackages = python2Packages;
+    inherit (python2Packages) lz4 txrequests pyjade boto3 moto txgithub mock
+      setuptoolsTrial isort pylint astroid pyflakes treq twisted jinja2 zope_interface
+      future sqlalchemy sqlalchemy_migrate dateutil txaio autobahn pyopenssl
+      service-identity idna sphinx sphinxcontrib-blockdiag sphinxcontrib-spelling
+      pyenchant docutils ramlfications sphinx-jinja buildPythonApplication;
   };
   buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix {
     inherit (python2Packages) buildPythonApplication mock setuptoolsTrial twisted future;
