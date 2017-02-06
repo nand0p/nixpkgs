@@ -27,6 +27,7 @@ pythonPackages.buildPythonApplication (rec {
     openssh
     buildbot-worker
     makeWrapper
+    treq
   ];
 
   propagatedBuildInputs = with pythonPackages; [

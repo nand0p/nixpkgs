@@ -31871,6 +31871,10 @@ EOF
   yenc = callPackage ../development/python-modules/yenc {
   };
 
+  treq = callPackage ../development/python-modules/treq { };
+
+  incremental = callPackage ../development/python-modules/incremental { };
+
   zeitgeist = if isPy3k then throw "zeitgeist not supported for interpreter ${python.executable}" else
     (pkgs.zeitgeist.override{python2Packages=self;}).py;
 
