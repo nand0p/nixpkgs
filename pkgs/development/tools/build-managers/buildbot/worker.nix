@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, gnused, coreutils, buildPythonApplication,
-  setuptoolsTrial, mock, twisted, future }:
+{ stdenv, fetchurl, gnused, coreutils, pythonPackages }:
 
-buildPythonApplication (rec {
+pythonPackages.buildPythonApplication (rec {
   name = "${pname}-${version}";
   pname = "buildbot-worker";
   version = "0.9.3";
@@ -11,12 +10,11 @@ buildPythonApplication (rec {
     sha256 = "176kp04g4c7gj15f73wppraqrirbfclyx214gcz966019niikcsp";
   };
 
-  buildInputs = [ setuptoolsTrial mock ];
-  propagatedBuildInputs = [ twisted future ];
+  buildInputs = with pythonPackages; [ setuptoolsTrial mock ];
+  propagatedBuildInputs = with pythonPackages; [ twisted future ];
 
   postPatch = ''
-    ${gnused}/bin/sed -i 's|/usr/bin/tail|${coreutils}/bin/tail|' \
-      buildbot_worker/scripts/logwatcher.py
+    ${gnused}/bin/sed -i 's|/usr/bin/tail|${coreutils}/bin/tail|' buildbot_worker/scripts/logwatcher.py
   '';
 
   meta = with stdenv.lib; {
