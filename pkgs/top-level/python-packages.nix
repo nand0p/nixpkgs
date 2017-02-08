@@ -21450,31 +21450,6 @@ in {
     doCheck = false;
   };
 
-  pyopenssl = buildPythonPackage rec {
-    name = "pyopenssl-${version}";
-    version = "16.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
-      sha256 = "88f7ada2a71daf2c78a4f139b19d57551b4c8be01f53a1cb5c86c2f3bf01355f";
-    };
-
-    preCheck = ''
-      sed -i 's/test_set_default_verify_paths/noop/' tests/test_ssl.py
-    '';
-
-    checkPhase = ''
-      runHook preCheck
-      export LANG="en_US.UTF-8";
-      py.test;
-      runHook postCheck
-    '';
-
-    buildInputs = [ pkgs.openssl self.pytest pkgs.glibcLocales ];
-    propagatedBuildInputs = [ self.cryptography self.pyasn1 self.idna ];
-  };
-
-
   pyquery = buildPythonPackage rec {
     name = "pyquery-${version}";
     version = "1.2.9";
@@ -26145,48 +26120,6 @@ in {
       homepage = https://github.com/pypa/twine;
       license = licenses.asl20;
       maintainer = with maintainers; [ fridh ];
-    };
-  };
-
-  twisted = buildPythonPackage rec {
-
-    name = "Twisted-${version}";
-    version = "16.4.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-      sha256 = "1d8d73f006c990744effb35588359fd44d43608649ac0b6b7edc71176e88e816";
-    };
-
-    propagatedBuildInputs = with self; [ zope_interface ];
-
-    # Patch t.p._inotify to point to libc. Without this,
-    # twisted.python.runtime.platform.supportsINotify() == False
-    patchPhase = optionalString stdenv.isLinux ''
-      substituteInPlace twisted/python/_inotify.py --replace \
-        "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
-    '';
-
-    # Generate Twisted's plug-in cache.  Twisted users must do it as well.  See
-    # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
-    # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
-    # details.
-    postInstall = "$out/bin/twistd --help > /dev/null";
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover -s twisted/test
-    '';
-    # Tests require network
-    doCheck = false;
-
-    meta = {
-      homepage = http://twistedmatrix.com/;
-      description = "Twisted, an event-driven networking engine written in Python";
-      longDescription = ''
-        Twisted is an event-driven networking engine written in Python
-        and licensed under the MIT license.
-      '';
-      license = licenses.mit;
-      maintainers = [ ];
     };
   };
 
@@ -32053,10 +31986,6 @@ EOF
   yenc = callPackage ../development/python-modules/yenc {
   };
 
-  treq = callPackage ../development/python-modules/treq { };
-
-  incremental = callPackage ../development/python-modules/incremental { };
-
   zeitgeist = if isPy3k then throw "zeitgeist not supported for interpreter ${python.executable}" else
     (pkgs.zeitgeist.override{python2Packages=self;}).py;
 
@@ -32085,6 +32014,18 @@ EOF
       maintainer = maintainers.fridh;
     };
   };
+
+  treq = callPackage ../development/python-modules/treq { };
+
+  incremental = callPackage ../development/python-modules/incremental { };
+
+  twisted = callPackage ../development/python-modules/twisted { };
+
+  automat = callPackage ../development/python-modules/automat { };
+
+  constantly = callPackage ../development/python-modules/constantly { };
+
+  pyopenssl = callPackage ../development/python-modules/pyopenssl { };
 
 });
 
