@@ -106,8 +106,12 @@ in {
       path = cfg.packages;
 
       preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -vp ${cfg.buildbotDir}
+        mkdir -vp ${cfg.buildbotDir}
+        rm -fv $cfg.buildbotDir}/buildbot.tac
         ${cfg.package}/bin/buildbot-worker create-worker ${cfg.buildbotDir} ${cfg.masterUrl} ${cfg.workerUser} ${cfg.workerPass}
+        echo "import sys" >> ${cfg.buildbotDir}/buildbot.tac
+        echo "from twisted.logger import textFileLogObserver, globalLogPublisher" >> ${cfg.buildbotDir}/buildbot.tac
+        echo "globalLogPublisher.addObserver(textFileLogObserver(sys.stdout))" >> ${cfg.buildbotDir}/buildbot.tac
       '';
 
       serviceConfig = {
