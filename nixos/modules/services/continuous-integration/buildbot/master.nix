@@ -92,10 +92,7 @@ in {
       workers = mkOption {
         type = types.listOf types.str;
         description = "List of Workers.";
-        default = [
-          "worker.Worker('example-worker', 'pass')"
-        ];
-        example = [ "worker.LocalWorker('example-worker')" ];
+        default = [ "worker.Worker('example-worker', 'pass')" ];
       };
 
       status = mkOption {
@@ -212,7 +209,7 @@ in {
 
     systemd.services.buildbot-master = {
       description = "Buildbot Continuous Integration Server.";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages;
 
@@ -227,14 +224,13 @@ in {
       preStart = ''
         ${pkgs.coreutils}/bin/mkdir -vp ${cfg.buildbotDir}
         ${pkgs.coreutils}/bin/ln -sfv ${masterCfg} ${cfg.buildbotDir}/master.cfg
+        ${pkgs.coreutils}/bin/rm -fv $cfg.buildbotDir}/buildbot.tac
         ${cfg.package}/bin/buildbot create-master ${cfg.buildbotDir}
+        ${pkgs.coreutils}/bin/echo "import sys" >> ${cfg.buildbotDir}/buildbot.tac
+        ${pkgs.coreutils}/bin/echo "from twisted.logger import textFileLogObserver, globalLogPublisher" >> ${cfg.buildbotDir}/buildbot.tac
+        ${pkgs.coreutils}/bin/echo "globalLogPublisher.addObserver(textFileLogObserver(sys.stdout))" >> ${cfg.buildbotDir}/buildbot.tac
       '';
 
-      postStart = ''
-        until [[ $(${pkgs.curl}/bin/curl -s --head -w '\n%{http_code}' http://localhost:${toString cfg.port} | tail -n1) =~ ^(200|403)$ ]]; do
-          sleep 1
-        done
-      '';
     };
   };
 

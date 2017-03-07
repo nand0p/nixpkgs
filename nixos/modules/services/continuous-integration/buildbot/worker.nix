@@ -107,7 +107,11 @@ in {
 
       preStart = ''
         ${pkgs.coreutils}/bin/mkdir -vp ${cfg.buildbotDir}
+        ${pkgs.coreutils}/bin/rm -fv $cfg.buildbotDir}/buildbot.tac
         ${cfg.package}/bin/buildbot-worker create-worker ${cfg.buildbotDir} ${cfg.masterUrl} ${cfg.workerUser} ${cfg.workerPass}
+        ${pkgs.coreutils}/bin/echo "import sys" >> ${cfg.buildbotDir}/buildbot.tac
+        ${pkgs.coreutils}/bin/echo "from twisted.logger import textFileLogObserver, globalLogPublisher" >> ${cfg.buildbotDir}/buildbot.tac
+        ${pkgs.coreutils}/bin/echo "globalLogPublisher.addObserver(textFileLogObserver(sys.stdout))" >> ${cfg.buildbotDir}/buildbot.tac
       '';
 
       serviceConfig = {
