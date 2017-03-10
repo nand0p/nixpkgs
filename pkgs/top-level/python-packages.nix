@@ -25855,19 +25855,7 @@ in {
     };
   };
 
-  tox = buildPythonPackage rec {
-    name = "tox-${version}";
-    version = "2.4.1";
-
-    propagatedBuildInputs = with self; [ py virtualenv pluggy ];
-
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tox/${name}.tar.gz";
-      sha256 = "1nwn4jz8ns53n17bm1xkzlz4zyyxbgjwrcg2cjsn25ab7hd5fwv6";
-    };
-  };
+  tox = callPackage ../development/python-modules/tox { };
 
   tqdm = buildPythonPackage rec {
     name = "tqdm-${version}";
@@ -32115,6 +32103,8 @@ EOF
 
   incremental = callPackage ../development/python-modules/incremental { };
 
+  pytest-incremental = callPackage ../development/python-modules/pytest-incremental { };
+
   treq = callPackage ../development/python-modules/treq { };
 
   snakeviz = callPackage ../development/python-modules/snakeviz { };
@@ -32126,6 +32116,18 @@ EOF
   automat = callPackage ../development/python-modules/automat { };
 
   m2r = callPackage ../development/python-modules/m2r { };
+
+  pydoctor = callPackage ../development/python-modules/pydoctor { };
+
+  twisted_dev_tools = callPackage ../development/python-modules/twisted_dev_tools { };
+
+  amptrac = callPackage ../development/python-modules/amptrac { };
+
+  doit = callPackage ../development/python-modules/doit { };
+
+  macfsevents = callPackage ../development/python-modules/macfsevents { };
+
+  epydoc = callPackage ../development/python-modules/epydoc { };
 
 });
 

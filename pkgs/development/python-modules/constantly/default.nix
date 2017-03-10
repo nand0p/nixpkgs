@@ -1,4 +1,4 @@
-{ stdenv, lib, python, buildPythonPackage, fetchPypi, tox }:
+{ stdenv, python, buildPythonPackage, fetchPypi, tox }:
 
   buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -16,7 +16,10 @@
       tox
     '';
 
-    meta = with lib; {
+    # NOTE: no tests written yet
+    doCheck = false;
+
+    meta = with stdenv.lib; {
       homepage = https://github.com/twisted/constantly;
       description = "Symbolic constants in Python.";
       license = licenses.mit;

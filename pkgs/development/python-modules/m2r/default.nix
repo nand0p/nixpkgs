@@ -1,4 +1,4 @@
-{ stdenv, lib, python, buildPythonPackage, fetchPypi, mistune, docutils }:
+{ stdenv, python, buildPythonPackage, fetchPypi, mistune, docutils }:
 
   buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -12,7 +12,7 @@
 
     propagatedBuildInputs = [ mistune docutils ];
 
-    meta = with lib; {
+    meta = with stdenv.lib; {
       homepage = https://github.com/miyakogi/m2r;
       description = "Markdown to reStructuredText converter.";
       license = licenses.mit;

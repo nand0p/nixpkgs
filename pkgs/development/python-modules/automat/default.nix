@@ -1,5 +1,4 @@
-{ stdenv, lib, python, buildPythonPackage, fetchPypi, m2r,
-  setuptools_scm, attrs, six, graphviz, twisted }:
+{ stdenv, python, buildPythonPackage, fetchPypi, m2r, setuptools_scm, attrs, six }:
 
   buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -13,11 +12,11 @@
 
     buildInputs = [ m2r setuptools_scm ];
 
-    propagatedBuildInputs = [ attrs six graphviz twisted ];
+    propagatedBuildInputs = [ attrs six ];
 
-    meta = with lib; {
-      homepage = https://github.com/twisted/constantly;
-      description = "Symbolic constants in Python.";
+    meta = with stdenv.lib; {
+      homepage = https://github.com/glyph/Automat;
+      description = "Self-service finite-state machines for the programmer on the go.";
       license = licenses.mit;
       maintainers = with maintainers; [ nand0p ];
     };
