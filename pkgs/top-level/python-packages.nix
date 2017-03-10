@@ -46,10 +46,10 @@ let
           url = "https://files.pythonhosted.org/packages/${python}/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}-${python}-${abi}-${platform}.whl";
         in pkgs.fetchurl {inherit url sha256;};
 
-      fetchSource = {pname, version, sha256}:
+      fetchSource = {pname, version, sha256, compress ? "gz"}:
       # Fetch a source tarball.
         let
-          url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.tar.gz";
+          url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${pname}-${version}.tar.${compress}";
         in pkgs.fetchurl {inherit url sha256;};
       fetcher = (if format == "wheel" then fetchWheel
         else if format == "setuptools" then fetchSource
@@ -26273,47 +26273,7 @@ in {
     };
   };
 
-  twisted = buildPythonPackage rec {
-
-    name = "Twisted-${version}";
-    version = "16.4.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-      sha256 = "1d8d73f006c990744effb35588359fd44d43608649ac0b6b7edc71176e88e816";
-    };
-
-    propagatedBuildInputs = with self; [ zope_interface ];
-
-    # Patch t.p._inotify to point to libc. Without this,
-    # twisted.python.runtime.platform.supportsINotify() == False
-    patchPhase = optionalString stdenv.isLinux ''
-      substituteInPlace twisted/python/_inotify.py --replace \
-        "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
-    '';
-
-    # Generate Twisted's plug-in cache.  Twisted users must do it as well.  See
-    # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
-    # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
-    # details.
-    postInstall = "$out/bin/twistd --help > /dev/null";
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover -s twisted/test
-    '';
-    # Tests require network
-    doCheck = false;
-
-    meta = {
-      homepage = http://twistedmatrix.com/;
-      description = "Twisted, an event-driven networking engine written in Python";
-      longDescription = ''
-        Twisted is an event-driven networking engine written in Python
-        and licensed under the MIT license.
-      '';
-      license = licenses.mit;
-      maintainers = [ ];
-    };
-  };
+  twisted = callPackage ../development/python-modules/twisted { };
 
   tzlocal = buildPythonPackage rec {
     name = "tzlocal-1.2.2";
