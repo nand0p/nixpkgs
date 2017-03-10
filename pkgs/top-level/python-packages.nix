@@ -32123,6 +32123,8 @@ EOF
 
   constantly = callPackage ../development/python-modules/constantly { };
 
+  automat = callPackage ../development/python-modules/automat { };
+
 });
 
 in fix' (extends overrides packages)
