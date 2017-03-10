@@ -32121,6 +32121,8 @@ EOF
 
   nitpick = callPackage ../applications/version-management/nitpick { };
 
+  constantly = callPackage ../development/python-modules/constantly { };
+
 });
 
 in fix' (extends overrides packages)
