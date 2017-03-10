@@ -32125,6 +32125,8 @@ EOF
 
   automat = callPackage ../development/python-modules/automat { };
 
+  m2r = callPackage ../development/python-modules/m2r { };
+
 });
 
 in fix' (extends overrides packages)
