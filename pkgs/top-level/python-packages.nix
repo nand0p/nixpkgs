@@ -32198,6 +32198,8 @@ EOF
 
   nitpick = callPackage ../applications/version-management/nitpick { };
 
+  distro = callPackage ../development/python-modules/distro { };
+
 });
 
 in fix' (extends overrides packages)
