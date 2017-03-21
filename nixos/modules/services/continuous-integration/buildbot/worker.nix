@@ -109,9 +109,9 @@ in {
         mkdir -vp ${cfg.buildbotDir}
         rm -fv $cfg.buildbotDir}/buildbot.tac
         ${cfg.package}/bin/buildbot-worker create-worker ${cfg.buildbotDir} ${cfg.masterUrl} ${cfg.workerUser} ${cfg.workerPass}
-        echo "import sys" >> ${cfg.buildbotDir}/buildbot.tac
-        echo "from twisted.logger import textFileLogObserver, globalLogPublisher" >> ${cfg.buildbotDir}/buildbot.tac
-        echo "globalLogPublisher.addObserver(textFileLogObserver(sys.stdout))" >> ${cfg.buildbotDir}/buildbot.tac
+        #echo "import sys" >> ${cfg.buildbotDir}/buildbot.tac
+        #echo "from twisted.logger import textFileLogObserver, globalLogPublisher" >> ${cfg.buildbotDir}/buildbot.tac
+        #echo "globalLogPublisher.addObserver(textFileLogObserver(sys.stdout))" >> ${cfg.buildbotDir}/buildbot.tac
       '';
 
       serviceConfig = {
@@ -119,7 +119,10 @@ in {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
-        ExecStart = "${cfg.package}/bin/buildbot-worker start --nodaemon ${cfg.buildbotDir}";
+
+        # NOTE: call twistd directly with stdout logging for systemd
+        #ExecStart = "${cfg.package}/bin/buildbot-worker start --nodaemon ${cfg.buildbotDir}";
+        ExecStart = "twistd -n -l - -y ${cfg.buildbotDir}/buildbot.tac";
       };
 
     };

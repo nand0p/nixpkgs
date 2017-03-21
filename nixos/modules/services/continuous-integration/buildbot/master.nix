@@ -212,23 +212,26 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages;
 
-      serviceConfig = {
-        Type = "simple";
-        User = cfg.user;
-        Group = cfg.group;
-        WorkingDirectory = cfg.home;
-        ExecStart = "${cfg.package}/bin/buildbot start --nodaemon ${cfg.buildbotDir}";
-      };
-
       preStart = ''
         mkdir -vp ${cfg.buildbotDir}
         ln -sfv ${masterCfg} ${cfg.buildbotDir}/master.cfg
         rm -fv $cfg.buildbotDir}/buildbot.tac
         ${cfg.package}/bin/buildbot create-master ${cfg.buildbotDir}
-        echo "import sys" >> ${cfg.buildbotDir}/buildbot.tac
-        echo "from twisted.logger import textFileLogObserver, globalLogPublisher" >> ${cfg.buildbotDir}/buildbot.tac
-        echo "globalLogPublisher.addObserver(textFileLogObserver(sys.stdout))" >> ${cfg.buildbotDir}/buildbot.tac
+        #echo "import sys" >> ${cfg.buildbotDir}/buildbot.tac
+        #echo "from twisted.logger import textFileLogObserver, globalLogPublisher" >> ${cfg.buildbotDir}/buildbot.tac
+        #echo "globalLogPublisher.addObserver(textFileLogObserver(sys.stdout))" >> ${cfg.buildbotDir}/buildbot.tac
       '';
+
+      serviceConfig = {
+        Type = "simple";
+        User = cfg.user;
+        Group = cfg.group;
+        WorkingDirectory = cfg.home;
+
+        # NOTE: call twistd directly with stdout logging for systemd
+        #ExecStart = "${cfg.package}/bin/buildbot start --nodaemon ${cfg.buildbotDir}";
+        ExecStart = "twistd -n -l - -y ${cfg.buildbotDir}/buildbot.tac";
+      };
 
     };
   };
