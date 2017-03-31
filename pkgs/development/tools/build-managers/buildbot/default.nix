@@ -5,7 +5,9 @@ let
     buildInputs = [ makeWrapper ] ++ plugins;
     passthru.withPlugins = moarPlugins: withPlugins (moarPlugins ++ plugins);
   } ''
-    makeWrapper ${package}/bin/buildbot $out/bin/buildbot --prefix PYTHONPATH : $PYTHONPATH
+    makeWrapper ${package}/bin/buildbot $out/bin/buildbot \
+      --prefix PYTHONPATH : "${package}/lib/python2.7/site-packages:$PYTHONPATH"
+    ln -sfv ${package}/lib $out/lib
   '';
 
   package = pythonPackages.buildPythonApplication (rec {

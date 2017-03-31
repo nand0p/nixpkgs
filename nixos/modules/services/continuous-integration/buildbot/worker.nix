@@ -74,7 +74,7 @@ in {
       };
 
       packages = mkOption {
-        default = [ ];
+        default = [ pkgs.python27Packages.twisted pkgs.git ];
         example = literalExample "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
@@ -109,9 +109,6 @@ in {
         mkdir -vp ${cfg.buildbotDir}
         rm -fv $cfg.buildbotDir}/buildbot.tac
         ${cfg.package}/bin/buildbot-worker create-worker ${cfg.buildbotDir} ${cfg.masterUrl} ${cfg.workerUser} ${cfg.workerPass}
-        #echo "import sys" >> ${cfg.buildbotDir}/buildbot.tac
-        #echo "from twisted.logger import textFileLogObserver, globalLogPublisher" >> ${cfg.buildbotDir}/buildbot.tac
-        #echo "globalLogPublisher.addObserver(textFileLogObserver(sys.stdout))" >> ${cfg.buildbotDir}/buildbot.tac
       '';
 
       serviceConfig = {
@@ -119,10 +116,11 @@ in {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
+        Environment = "PYTHONPATH=${cfg.package}/lib/python2.7/site-packages:${pkgs.python27Packages.future}/lib/python2.7/site-packages";
 
         # NOTE: call twistd directly with stdout logging for systemd
         #ExecStart = "${cfg.package}/bin/buildbot-worker start --nodaemon ${cfg.buildbotDir}";
-        ExecStart = "twistd -n -l - -y ${cfg.buildbotDir}/buildbot.tac";
+        ExecStart = "${pkgs.python27Packages.twisted}/bin/twistd -n -l - -y ${cfg.buildbotDir}/buildbot.tac";
       };
 
     };

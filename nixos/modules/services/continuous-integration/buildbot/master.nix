@@ -62,7 +62,7 @@ in {
       extraConfig = mkOption {
         type = types.str;
         description = "Extra configuration to append to master.cfg";
-        default = "";
+        default = "c['buildbotNetUsageData'] = None";
       };
 
       masterCfg = mkOption {
@@ -175,14 +175,14 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.buildbot-ui;
-        defaultText = "pkgs.buildbot-ui";
+        default = pkgs.buildbot-full;
+        defaultText = "pkgs.buildbot-full";
         description = "Package to use for buildbot.";
         example = literalExample "pkgs.buildbot-full";
       };
 
       packages = mkOption {
-        default = [ ];
+        default = [ pkgs.python27Packages.twisted ];
         example = literalExample "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
@@ -213,13 +213,11 @@ in {
       path = cfg.packages;
 
       preStart = ''
+        env > envvars
         mkdir -vp ${cfg.buildbotDir}
         ln -sfv ${masterCfg} ${cfg.buildbotDir}/master.cfg
         rm -fv $cfg.buildbotDir}/buildbot.tac
         ${cfg.package}/bin/buildbot create-master ${cfg.buildbotDir}
-        #echo "import sys" >> ${cfg.buildbotDir}/buildbot.tac
-        #echo "from twisted.logger import textFileLogObserver, globalLogPublisher" >> ${cfg.buildbotDir}/buildbot.tac
-        #echo "globalLogPublisher.addObserver(textFileLogObserver(sys.stdout))" >> ${cfg.buildbotDir}/buildbot.tac
       '';
 
       serviceConfig = {
@@ -227,10 +225,11 @@ in {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
-
+        Environment = "PYTHONPATH=${cfg.package}/lib/python2.7/site-packages:${pkgs.buildbot-plugins.www}/lib/python2.7/site-packages:${pkgs.buildbot-plugins.waterfall-view}/lib/python2.7/site-packages:${pkgs.buildbot-plugins.console-view}/lib/python2.7/site-packages:${pkgs.python27Packages.future}/lib/python2.7/site-packages:${pkgs.python27Packages.dateutil}/lib/python2.7/site-packages:${pkgs.python27Packages.six}/lib/python2.7/site-packages:${pkgs.python27Packages.sqlalchemy}/lib/python2.7/site-packages:${pkgs.python27Packages.jinja2}/lib/python2.7/site-packages:${pkgs.python27Packages.markupsafe}/lib/python2.7/site-packages:${pkgs.python27Packages.sqlalchemy_migrate}/lib/python2.7/site-packages:${pkgs.python27Packages.tempita}/lib/python2.7/site-packages:${pkgs.python27Packages.decorator}/lib/python2.7/site-packages:${pkgs.python27Packages.sqlparse}/lib/python2.7/site-packages:${pkgs.python27Packages.txaio}/lib/python2.7/site-packages:${pkgs.python27Packages.autobahn}/lib/python2.7/site-packages:${pkgs.python27Packages.pyjwt}/lib/python2.7/site-packages:${pkgs.python27Packages.distro}/lib/python2.7/site-packages:${pkgs.python27Packages.pbr}/lib/python2.7/site-packages:${pkgs.python27Packages.urllib3}/lib/python2.7/site-packages";
+ 
         # NOTE: call twistd directly with stdout logging for systemd
         #ExecStart = "${cfg.package}/bin/buildbot start --nodaemon ${cfg.buildbotDir}";
-        ExecStart = "twistd -n -l - -y ${cfg.buildbotDir}/buildbot.tac";
+        ExecStart = "${pkgs.python27Packages.twisted}/bin/twistd -n -l - -y ${cfg.buildbotDir}/buildbot.tac";
       };
 
     };
