@@ -2362,7 +2362,9 @@ with pkgs;
 
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
-  hdf4 = callPackage ../tools/misc/hdf4 { };
+  hdf4 = callPackage ../tools/misc/hdf4 {
+    szip = null;
+  };
 
   hdf5 = callPackage ../tools/misc/hdf5 {
     gfortran = null;
@@ -18731,6 +18733,8 @@ with pkgs;
   streamripper = callPackage ../applications/audio/streamripper { };
 
   sqsh = callPackage ../development/tools/sqsh { };
+
+  stelligent-mu = callPackage ../development/tools/continuous-delivery/stelligent-mu { };
 
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_8_5
