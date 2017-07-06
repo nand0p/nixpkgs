@@ -10717,6 +10717,8 @@ with pkgs;
 
   buildGoPackage = buildGo18Package;
 
+  stringer = callPackage ../development/tools/stringer { };
+
   go2nix = callPackage ../development/tools/go2nix { };
 
   leaps = callPackage ../development/tools/leaps { };
