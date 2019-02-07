@@ -1939,6 +1939,10 @@ in
 
   cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
 
+  ethminer = callPackage ../tools/misc/ethminer { };
+
+  ethash = callPackage ../development/libraries/ethash { };
+
   cuetools = callPackage ../tools/cd-dvd/cuetools { };
 
   u3-tool = callPackage ../tools/filesystems/u3-tool { };
@@ -8536,6 +8540,8 @@ in
   # special forks used for dsview
   libsigrok4dsl = callPackage ../applications/science/electronics/dsview/libsigrok4dsl.nix { };
   libsigrokdecode4dsl = callPackage ../applications/science/electronics/dsview/libsigrokdecode4dsl.nix { };
+
+  cli11 = callPackage ../development/tools/misc/cli11 { };
 
   dcadec = callPackage ../development/tools/dcadec { };
 

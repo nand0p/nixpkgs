@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_STATIC_LIBS=OFF"
+    "-DJSONCPP_WITH_CMAKE_PACKAGE=ON"
   ];
 
   meta = with stdenv.lib; {
