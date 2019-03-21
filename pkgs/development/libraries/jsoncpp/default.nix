@@ -1,8 +1,5 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, python
-}:
+{ stdenv , fetchFromGitHub , cmake , python }:
+
 stdenv.mkDerivation rec {
   name = "jsoncpp-${version}";
   version = "1.8.4";
@@ -36,6 +33,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_STATIC_LIBS=OFF"
+    "-DJSONCPP_WITH_CMAKE_PACKAGE=ON"
   ];
 
   meta = with stdenv.lib; {
