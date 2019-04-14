@@ -2,7 +2,6 @@
   openmpi, ocl-icd, mesa, gbenchmark, gtest }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "ethash";
   version = "0.4.2";
 

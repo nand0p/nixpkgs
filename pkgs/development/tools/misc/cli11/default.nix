@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, gtest, python, boost }:
 
 stdenv.mkDerivation rec {
-  name = "cli11-${version}";
+  pname = "cli11";
   version = "1.7.1";
 
   src = fetchFromGitHub {

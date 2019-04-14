@@ -23,7 +23,7 @@ in
       recheckInterval = mkOption {
         type = types.int;
         default = 2000;
-        description = "Time in milliseconds to farm recheck.";
+        description = "Interval in milliseconds between farm rechecks.";
       };
 
       toolkit = mkOption {
@@ -40,7 +40,7 @@ in
 
       wallet = mkOption {
         type = types.str;
-        example = "0x0484A1EfB3C88B0C7dE21919D480fF51099c8113";
+        example = "1x0484A1EfB3C88B0C7dE21919D480fF51099c8113";
         description = "Ethereum wallet address.";
       };
 
@@ -104,7 +104,7 @@ in
           --report-hashrate \
           --${cfg.toolkit} \
           --api-port ${toString cfg.apiPort} \
-          --pool stratum1+tcp://${cfg.wallet}@${cfg.pool}:${toString cfg.stratumPort}/${cfg.rig}/${cfg.registerMail}
+          --pool stratum1+tcp://${escapeShellArg cfg.wallet}@${escapeShellArg cfg.pool}:${toString cfg.stratumPort}/${escapeShellArg cfg.rig}/${escapeShellArg cfg.registerMail}
       '';
 
     };

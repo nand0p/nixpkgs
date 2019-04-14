@@ -2,7 +2,6 @@
   cudatoolkit, mesa, ethash, opencl-info, ocl-icd, openssl, pkg-config, cli11 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "ethminer";
   version = "0.18.0-rc.0";
 
