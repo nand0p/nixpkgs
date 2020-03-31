@@ -6,7 +6,7 @@
   jsoncpp,
   boost,
   makeWrapper,
-  cudatoolkit,
+  cudatoolkit_10_1,
   mesa,
   ethash,
   opencl-info,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     boost
     opencl-headers
     mesa
-    cudatoolkit
+    cudatoolkit_10_1
     ethash
     opencl-info
     ocl-icd

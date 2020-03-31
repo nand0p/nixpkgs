@@ -1,4 +1,10 @@
-{ stdenv, fetchFromGitHub, opencl-clhpp, ocl-icd }:
+{
+  stdenv,
+  fetchFromGitHub,
+  opencl-clhpp,
+  ocl-icd,
+  cudatoolkit_10_1
+}:
 
 stdenv.mkDerivation {
   name = "opencl-info-2014-02-21";
@@ -10,7 +16,7 @@ stdenv.mkDerivation {
     sha256 = "114lxgnjg40ivjjszkv4n3f3yq2lbrvywryvbazf20kqmdz7315l";
   };
 
-  buildInputs = [ opencl-clhpp ocl-icd ];
+  buildInputs = [ opencl-clhpp ocl-icd cudatoolkit_10_1 ];
 
   NIX_LDFLAGS = "-lOpenCL";
 
@@ -23,6 +29,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/marchv/opencl-info;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar nand0p ];
   };
 }
