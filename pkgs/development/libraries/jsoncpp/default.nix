@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, python, fetchpatch }:
+{ gcc8Stdenv, fetchFromGitHub, cmake, python, fetchpatch }:
 
-stdenv.mkDerivation rec {
+gcc8Stdenv.mkDerivation rec {
   pname = "jsoncpp";
   version = "1.9.2";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   # Hack to be able to run the test, broken because we use
   # CMAKE_SKIP_BUILD_RPATH to avoid cmake resetting rpath on install
-  preBuild = if stdenv.isDarwin then ''
+  preBuild = if gcc8Stdenv.isDarwin then ''
     export DYLD_LIBRARY_PATH="`pwd`/src/lib_json''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
   '' else ''
     export LD_LIBRARY_PATH="`pwd`/src/lib_json''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python ];
 
   # fix inverted sense in isAnyCharRequiredQuoting on aarch64. See: https://github.com/open-source-parsers/jsoncpp/pull/1120
-  patches = stdenv.lib.optionals stdenv.isAarch64 [
+  patches = gcc8Stdenv.lib.optionals gcc8Stdenv.isAarch64 [
     (fetchpatch {
       url = "https://github.com/open-source-parsers/jsoncpp/commit/9093358efae9e5981aa60013487fc7215f040a59.patch";
       sha256 = "1wiqp70sck2md14sfc0zdkblqk9750cl55ykf9d6b9vs1ifzzzq5";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     "-DJSONCPP_WITH_CMAKE_PACKAGE=ON"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with gcc8Stdenv.lib; {
     inherit version;
     homepage = https://github.com/open-source-parsers/jsoncpp;
     description = "A C++ library for interacting with JSON.";

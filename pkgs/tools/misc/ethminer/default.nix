@@ -1,12 +1,12 @@
 {
-  stdenv,
+  gcc8Stdenv,
   fetchFromGitHub,
   opencl-headers,
   cmake,
   jsoncpp,
-  boost,
+  boost168,
   makeWrapper,
-  cudatoolkit_10_1,
+  cudatoolkit,
   mesa,
   ethash,
   opencl-info,
@@ -16,7 +16,7 @@
   cli11
 }:
 
-stdenv.mkDerivation rec {
+gcc8Stdenv.mkDerivation rec {
   pname = "ethminer";
   version = "0.18.0";
 
@@ -46,10 +46,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cli11
-    boost
+    boost168
     opencl-headers
     mesa
-    cudatoolkit_10_1
+    cudatoolkit
     ethash
     opencl-info
     ocl-icd
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/ethminer --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with gcc8Stdenv.lib; {
     description = "Ethereum miner with OpenCL, CUDA and stratum support";
     homepage = https://github.com/ethereum-mining/ethminer;
     platforms = [ "x86_64-linux" ];
